@@ -1,26 +1,47 @@
 import { ApolloServer } from "@apollo/server";
-
-import {startStandaloneServer} from '@apollo/server/standalone'
+import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import express from 'express';
+import http from 'http';
+import cors from 'cors';
 import mergedTypeDefs from "./typeDefs";
 import mergedResolvers from "./resolvers";
 
-
-// Define your context type
+// Context interface for Apollo Server
 interface MyContext {
-    // Add any properties you need in your context
-    user?: { id: string; name: string }; // Example property
+  token?: string;
 }
+
+// Initialize Express App
+const app = express();
+const httpServer = http.createServer(app);
+
+// Create Apollo Server instance
 const server = new ApolloServer<MyContext>({
-    typeDefs:mergedTypeDefs,
-    resolvers:mergedResolvers
+  typeDefs: mergedTypeDefs,
+  resolvers: mergedResolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-const startServer = async ()=>{
+// Start Apollo Server
+const startServer = async () => {
+  await server.start();
 
-    const {url} = await startStandaloneServer(server);
-    console.log(`✅ Server ready at ${url}`)
-}
+  // Apply middleware after Apollo server starts
+  app.use(
+    '/',
+    cors<cors.CorsRequest>(),
+    express.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => ({ token: req.headers.token }),
+    })
+  );
 
-startServer()
+  // Start the HTTP server
+  httpServer.listen(4000, () => {
+    console.log(`🚀 Server ready at http://localhost:4000/`);
+  });
+};
 
-
+// Start the server
+startServer();
