@@ -100,7 +100,7 @@ const startServer = async () => {
 
     // Start the HTTP server
     httpServer.listen(PORT, () => {
-      console.log(`❄️  Server ready at port:${PORT}`);
+      console.log(`❄️  Server ready at http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error("Failed to start the server:", error);

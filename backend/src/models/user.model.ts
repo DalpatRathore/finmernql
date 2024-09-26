@@ -44,6 +44,14 @@ const userSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+export interface UserDocument extends mongoose.Document {
+  username: string;
+  name: string;
+  password: string;
+  profilePic: string;
+  gender: "male" | "female";
+}
+
 const User = mongoose.model("User", userSchema);
 
 export default User
