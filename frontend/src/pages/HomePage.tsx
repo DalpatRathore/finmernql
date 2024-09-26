@@ -1,9 +1,11 @@
-import HeroSection from "../components/HeroSection";
+import { AddTransactionForm } from "@/components/forms/AddTransactionForm";
+// import HeroSection from "../components/HeroSection";
 
 const HomePage = () => {
   return (
     <div className="h-full">
-      <HeroSection></HeroSection>
+      {/* <HeroSection></HeroSection> */}
+      <AddTransactionForm></AddTransactionForm>
     </div>
   );
 };
