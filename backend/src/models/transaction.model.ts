@@ -52,6 +52,16 @@ const transactionSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+export interface TransactionsDocument extends mongoose.Document {
+  userId: mongoose.Types.ObjectId; // Correct type for userId
+  description: string;
+  paymentType: "cash" | "card";
+  category: "saving" | "expense" | "investment";
+  amount: number;
+  location: string;
+  date: Date;
+}
+
 const Transaction= mongoose.model("Transaction", transactionSchema);
 
 export default Transaction

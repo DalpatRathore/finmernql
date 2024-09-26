@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 
 import { Request, Response } from 'express';
 
-type GraphQLContext = {
+interface GraphQLContext {
   req: Request;
   res: Response;
   login: (user: UserDocument) => Promise<void>;
@@ -13,6 +13,7 @@ type GraphQLContext = {
     strategy: string,
     options: { username: string; password: string }
   ) => Promise<{ user: UserDocument }>;
+  getUser: () => Promise<UserDocument | null>;
 };
 
 
@@ -103,11 +104,29 @@ const userResolver = {
   },
 
   Query: {
-    users: (_: unknown, __: unknown, context: GraphQLContext) => {
-      // Access context.user if needed
-      return users;
+    authUser: async(_:unknown, __:unknown, context:GraphQLContext)=>{
+      try {
+        const user = await context.getUser()
+        return user;
+        
+      } catch (error:any) {
+        console.log("Error in authUser", error);
+        throw new Error(error.message || "Internal server error");
+        
+      }
     },
+    user: async(_:unknown,{userId}: { userId: string }): Promise<UserDocument | null> =>{
+      try {
+        const user = await User.findById(userId);
+        return user;
+      } catch (error:any) {
+        console.log("Error in getting user", error);
+        throw new Error(error.message || "Internal server error");
+        
+      }
+    }
   },
+  // TODO:
 };
 
 export default userResolver;
