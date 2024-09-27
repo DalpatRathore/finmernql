@@ -20,19 +20,19 @@ const userSchema = new mongoose.Schema({
     required: [true, "Password is required"],
     minlength: [6, "Password must be at least 6 characters long"],
     maxlength: [100, "Password cannot exceed 100 characters"],
-    // Optionally, you can add a regex for password validation
-    match: [/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/, "Password must contain at least one letter and one number"]
+    // // Optionally, you can add a regex for password validation
+    // match: [/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/, "Password must contain at least one letter and one number"]
   },
   profilePicture: {
     type: String,
     default: "",
-    validate: {
-      validator: function(v: string) {
-        // Optionally validate if it's a valid URL format
-        return v === "" || /^https?:\/\/.+\.(jpg|jpeg|png)$/.test(v);
-      },
-      message: "Profile picture must be a valid image URL (jpg, jpeg, png)"
-    }
+    // validate: {
+    //   validator: function(v: string) {
+    //     // Optionally validate if it's a valid URL format
+    //     return v === "" || /^https?:\/\/.+\.(jpg|jpeg|png)$/.test(v);
+    //   },
+    //   message: "Profile picture must be a valid image URL (jpg, jpeg, png)"
+    // }
   },
   gender: {
     type: String,
