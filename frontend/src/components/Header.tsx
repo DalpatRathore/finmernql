@@ -18,7 +18,7 @@ const Header = () => {
           </Link>
 
           <div className="flex items-center gap-4">
-            {data?.authuser ? (
+            {data?.authUser ? (
               <>
                 <User2></User2>
               </>

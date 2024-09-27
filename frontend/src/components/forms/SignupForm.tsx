@@ -13,9 +13,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Separator } from "../ui/separator";
+import { useMutation } from "@apollo/client";
+import { SIGN_UP } from "@/graphql/mutations/user.mutation";
+import toast from "react-hot-toast";
+import { LoaderCircle } from "lucide-react";
 
 const formSchema = z
   .object({
@@ -42,9 +46,10 @@ const formSchema = z
       .string()
       .min(6, { message: "Password must be at least 6 characters long." })
       .max(100, { message: "Password cannot exceed 100 characters." })
-      .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/, {
-        message: "Password must contain at least one letter and one number.",
-      }),
+      .refine(
+        value => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/.test(value),
+        { message: "Password must contain at least one letter and one number." }
+      ),
 
     confirmPassword: z
       .string()
@@ -71,17 +76,36 @@ const formSchema = z
     //   .optional(), // Optional since it has a default value
   });
 
-export function SignupForm() {
+const SignupForm = () => {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
+      name: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const [signUp, { loading }] = useMutation(SIGN_UP);
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
+    try {
+      const { name, username, password, gender } = values;
+      await signUp({
+        variables: {
+          input: { name, username, password, gender },
+        },
+      });
+      form.reset();
+      navigate("/");
+      toast.success("Registration successful!");
+    } catch (error) {
+      toast.error("Something went wrong!");
+      console.log(error);
+    }
   };
   return (
     <Card className="w-full mx-auto max-w-xl">
@@ -128,7 +152,7 @@ export function SignupForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="password" {...field} />
+                    <Input type="text" placeholder="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -184,8 +208,15 @@ export function SignupForm() {
               )}
             />
             <Separator></Separator>
-            <Button type="submit" className="w-full">
-              Register
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? (
+                <>
+                  Registering{" "}
+                  <LoaderCircle className="w-4 h-4 ml-2 animate-spin"></LoaderCircle>
+                </>
+              ) : (
+                "Register"
+              )}
             </Button>
           </form>
         </Form>
@@ -198,4 +229,5 @@ export function SignupForm() {
       </CardContent>
     </Card>
   );
-}
+};
+export default SignupForm;
