@@ -7,6 +7,7 @@ import NotFoundPage from "./pages/NotFoundPage.tsx";
 import SignUpPage from "./pages/SignUpPage.tsx";
 import Root from "./Root.tsx";
 import HomePage from "./pages/HomePage.tsx";
+import TransactionPage from "./pages/TransactionPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUpPage />,
+      },
+      {
+        path: "transaction",
+        element: <TransactionPage />,
       },
     ],
   },
