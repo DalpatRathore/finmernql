@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     // Optionally, you can add a regex for password validation
     match: [/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/, "Password must contain at least one letter and one number"]
   },
-  profilePic: {
+  profilePicture: {
     type: String,
     default: "",
     validate: {
@@ -48,7 +48,7 @@ export interface UserDocument extends mongoose.Document {
   username: string;
   name: string;
   password: string;
-  profilePic: string;
+  profilePicture: string;
   gender: "male" | "female";
 }
 

@@ -126,7 +126,7 @@ const userResolver = {
       }
     }
   },
-  // TODO:
+  
 };
 
 export default userResolver;
