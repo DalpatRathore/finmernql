@@ -9,6 +9,7 @@ import Root from "./Root.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import TransactionPage from "./pages/TransactionPage.tsx";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 const client = new ApolloClient({
   // TODO => Update the uri on production
@@ -49,7 +50,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ApolloProvider client={client}>
-      <RouterProvider router={router} />
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </ApolloProvider>
   </StrictMode>
 );
