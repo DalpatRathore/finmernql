@@ -76,7 +76,7 @@ export function AddTransactionForm() {
   };
 
   return (
-    <Card className="w-full mx-auto max-w-lg">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-2xl">Add Transaction</CardTitle>
       </CardHeader>
