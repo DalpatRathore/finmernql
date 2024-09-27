@@ -30,6 +30,7 @@ import {
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { Separator } from "../ui/separator";
 
 const transactionSchema = z.object({
   description: z
@@ -38,11 +39,11 @@ const transactionSchema = z.object({
     .max(255, { message: "Description cannot exceed 255 characters." }),
 
   paymentType: z.enum(["cash", "card"], {
-    message: "Payment type must be either 'cash' or 'card'.",
+    message: "Please select value",
   }),
 
   category: z.enum(["saving", "expense", "investment"], {
-    message: "Category must be one of 'saving', 'expense', or 'investment'.",
+    message: "Please select value",
   }),
 
   amount: z
@@ -98,76 +99,125 @@ export function AddTransactionForm() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="paymentType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>PaymentType</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 lg:gap-8">
+              <FormField
+                control={form.control}
+                name="paymentType"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>PaymentType</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a value" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="cash">Cash</SelectItem>
+                        <SelectItem value="card">Card</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Category</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a value" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="saving">Saving</SelectItem>
+                        <SelectItem value="expense">Expense</SelectItem>
+                        <SelectItem value="investment">Investment</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 lg:gap-8">
+              <FormField
+                control={form.control}
+                name="amount"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Amount</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a value" />
-                      </SelectTrigger>
+                      <Input
+                        type="number"
+                        placeholder="shadcn"
+                        {...field}
+                        onChange={e => {
+                          const value = parseFloat(e.target.value); // Convert input to number
+                          field.onChange(isNaN(value) ? 0 : value); // Set to 0 if NaN
+                        }}
+                      />
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="cash">Cash</SelectItem>
-                      <SelectItem value="card">Card</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Date</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a value" />
-                      </SelectTrigger>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !field.value && "text-muted-foreground" // Check if the field value is empty
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value ? (
+                              format(new Date(field.value), "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={
+                              field.value ? new Date(field.value) : undefined
+                            } // Ensure this is a Date object
+                            onSelect={date => {
+                              if (date) {
+                                field.onChange(date); // Directly set the Date object
+                              }
+                            }}
+                            initialFocus
+                            disabled={date => date > new Date()} // Disable future dates
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="saving">Saving</SelectItem>
-                      <SelectItem value="expense">Expense</SelectItem>
-                      <SelectItem value="investment">Investment</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="amount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Amount</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="shadcn"
-                      {...field}
-                      onChange={e => {
-                        const value = parseFloat(e.target.value); // Convert input to number
-                        field.onChange(isNaN(value) ? 0 : value); // Set to 0 if NaN
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
@@ -182,52 +232,7 @@ export function AddTransactionForm() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Date</FormLabel>
-                  <FormControl>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground" // Check if the field value is empty
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value ? (
-                            format(new Date(field.value), "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={
-                            field.value ? new Date(field.value) : undefined
-                          } // Ensure this is a Date object
-                          onSelect={date => {
-                            if (date) {
-                              field.onChange(date); // Directly set the Date object
-                            }
-                          }}
-                          initialFocus
-                          disabled={date => date > new Date()} // Disable future dates
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+            <Separator></Separator>
             <Button type="submit" className="w-full">
               Add Transaction
             </Button>

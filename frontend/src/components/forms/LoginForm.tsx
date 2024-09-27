@@ -46,7 +46,7 @@ export function LoginForm() {
     console.log(values);
   };
   return (
-    <Card className="w-full mx-auto max-w-2xl">
+    <Card className="w-full mx-auto max-w-xl">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>
@@ -57,7 +57,7 @@ export function LoginForm() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 w-full max-w- mx-auto"
+            className="space-y-5 w-full max-w-md mx-auto"
           >
             <FormField
               control={form.control}

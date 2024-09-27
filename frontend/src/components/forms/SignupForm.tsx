@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Separator } from "../ui/separator";
 
 const formSchema = z
   .object({
@@ -89,7 +90,7 @@ export function SignupForm() {
     console.log(values);
   };
   return (
-    <Card className="w-full mx-auto max-w-2xl">
+    <Card className="w-full mx-auto max-w-xl">
       <CardHeader>
         <CardTitle className="text-2xl">Register</CardTitle>
         <CardDescription>
@@ -100,7 +101,7 @@ export function SignupForm() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 w-full max-w- mx-auto"
+            className="space-y-5 w-full max-w-md mx-auto"
           >
             <FormField
               control={form.control}
@@ -191,6 +192,7 @@ export function SignupForm() {
                 </FormItem>
               )}
             />
+            <Separator></Separator>
             <Button type="submit" className="w-full">
               Register
             </Button>
