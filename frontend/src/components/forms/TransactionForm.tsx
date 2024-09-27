@@ -62,7 +62,11 @@ const transactionSchema = z.object({
   }),
 });
 
-export function AddTransactionForm() {
+type TransactionFormProps = {
+  formType: string;
+};
+
+const TransactionForm = ({ formType }: TransactionFormProps) => {
   const form = useForm<z.infer<typeof transactionSchema>>({
     resolver: zodResolver(transactionSchema),
     // defaultValues: {
@@ -76,9 +80,9 @@ export function AddTransactionForm() {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl">Add Transaction</CardTitle>
+        <CardTitle className="text-2xl">{formType} Transaction</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -234,11 +238,13 @@ export function AddTransactionForm() {
             />
             <Separator></Separator>
             <Button type="submit" className="w-full">
-              Add Transaction
+              {formType} Transaction
             </Button>
           </form>
         </Form>
       </CardContent>
     </Card>
   );
-}
+};
+
+export default TransactionForm;

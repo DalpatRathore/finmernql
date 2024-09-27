@@ -3,7 +3,7 @@ import { LoginForm } from "@/components/forms/LoginForm";
 const LoginPage = () => {
   return (
     <div>
-      <div className="bg-gray-800 font-sans min-h-[350px] relative max-w-7xl mx-auto rounded overflow-hidden">
+      <div className="bg-gray-800 font-sans min-h-[350px] relative max-w-7xl mx-auto rounded overflow-hidden my-3">
         <div className="grid lg:grid-cols-2 w-full h-full absolute inset-0">
           <div className="p-4 max-lg:hidden">
             <img
