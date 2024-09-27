@@ -12,13 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Separator } from "../ui/separator";
@@ -93,15 +87,12 @@ export function SignupForm() {
     <Card className="w-full mx-auto max-w-xl">
       <CardHeader>
         <CardTitle className="text-2xl">Register</CardTitle>
-        <CardDescription>
-          Enter your email below to register to your account
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 w-full max-w-md mx-auto"
+            className="space-y-4 w-full max-w-md mx-auto"
           >
             <FormField
               control={form.control}
