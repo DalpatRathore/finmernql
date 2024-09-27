@@ -87,7 +87,7 @@ const startServer = async () => {
 
     // Apply middleware after Apollo server starts
     app.use(
-      '/',
+      '/graphql',
       cors<cors.CorsRequest>({
         origin:"http://localhost:3000",
         credentials:true
@@ -100,7 +100,7 @@ const startServer = async () => {
 
     // Start the HTTP server
     httpServer.listen(PORT, () => {
-      console.log(`❄️  Server ready at http://localhost:${PORT}`);
+      console.log(`❄️  Server ready at http://localhost:${PORT}/graphql`);
     });
   } catch (error) {
     console.error("Failed to start the server:", error);

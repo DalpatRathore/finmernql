@@ -14,7 +14,6 @@ type Transaction{
 type Query{
     transactions:[Transaction!]
     transaction(transactionId:ID!):Transaction
-    //   TODO:
 }
 
 type Mutation{
