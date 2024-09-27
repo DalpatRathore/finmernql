@@ -19,7 +19,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { LOGIN } from "@/graphql/mutations/user.mutation";
+import { useMutation } from "@apollo/client";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   username: z
@@ -34,6 +37,7 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,8 +46,24 @@ export function LoginForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const [login, { loading, error }] = useMutation(LOGIN, {
+    refetchQueries: ["GetAuthenticatedUser"],
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
+
+    try {
+      await login({
+        variables: {
+          input: values,
+        },
+      });
+      toast.success("Login successfull");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Card className="w-full mx-auto max-w-xl">
@@ -53,6 +73,13 @@ export function LoginForm() {
           Enter your email below to login to your account
         </CardDescription>
       </CardHeader>
+      {error && (
+        <div className="w-full flex items-center justify-center">
+          <p className="text-red-600 text-center">
+            Invalid username or password
+          </p>
+        </div>
+      )}
       <CardContent>
         <Form {...form}>
           <form
@@ -85,7 +112,7 @@ export function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={loading}>
               Login
             </Button>
           </form>

@@ -88,10 +88,12 @@ const SignupForm = () => {
     },
   });
 
-  const [signUp, { loading }] = useMutation(SIGN_UP);
+  const [signUp, { loading }] = useMutation(SIGN_UP, {
+    refetchQueries: ["GetAuthenticatedUser"],
+  });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    // console.log(values);
     try {
       const { name, username, password, gender } = values;
       await signUp({

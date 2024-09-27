@@ -1,12 +1,28 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { SquareArrowOutUpRight, User2 } from "lucide-react";
-import { useQuery } from "@apollo/client";
+import { LogOut, SquareArrowOutUpRight, User2 } from "lucide-react";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_AUTHENTICATED_USER } from "@/graphql/queries/user.query";
 import ThemeToggle from "./ThemeToggle";
+import toast from "react-hot-toast";
+import { LOGOUT } from "@/graphql/mutations/user.mutation";
 
 const Header = () => {
   const { data } = useQuery(GET_AUTHENTICATED_USER);
+
+  const [logout] = useMutation(LOGOUT, {
+    refetchQueries: ["GetAuthenticatedUser"],
+  });
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast.success("Logout successfully");
+    } catch (error) {
+      console.log(error);
+      console.log("Something went wrong!");
+    }
+  };
 
   return (
     <header className="border-b border-gray-200">
@@ -21,6 +37,9 @@ const Header = () => {
             {data?.authUser ? (
               <>
                 <User2></User2>
+                <Button variant={"outline"} onClick={handleLogout}>
+                  <LogOut></LogOut>
+                </Button>
               </>
             ) : (
               <>
