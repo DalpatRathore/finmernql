@@ -23,6 +23,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { LOGIN } from "@/graphql/mutations/user.mutation";
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   username: z
@@ -62,7 +63,7 @@ export function LoginForm() {
       toast.success("Login successfull");
       navigate("/");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   return (
@@ -113,7 +114,14 @@ export function LoginForm() {
               )}
             />
             <Button type="submit" className="w-full" disabled={loading}>
-              Login
+              {loading ? (
+                <>
+                  Processing...
+                  <Loader2 className="w-4 h-4 ml-2 animate-spin"></Loader2>
+                </>
+              ) : (
+                "Login"
+              )}
             </Button>
           </form>
         </Form>
