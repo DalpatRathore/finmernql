@@ -27,13 +27,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, LoaderCircle } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
-import { useMutation } from "@apollo/client";
-import { CREATE_TRANSACTION } from "@/graphql/mutations/transaction.mutation";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+  CREATE_TRANSACTION,
+  UPDATE_TRANSACTION,
+} from "@/graphql/mutations/transaction.mutation";
 import toast from "react-hot-toast";
+import { GET_TRANSACTION } from "@/graphql/queries/transaction.query";
+import Loader from "../Loader";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const transactionSchema = z.object({
   description: z
@@ -67,38 +74,91 @@ const transactionSchema = z.object({
 
 type TransactionFormProps = {
   formType: string;
+  transactionId?: string;
 };
 
-const TransactionForm = ({ formType }: TransactionFormProps) => {
+const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
+  const navigate = useNavigate();
+  const { data, loading: fetchLoading } = useQuery(GET_TRANSACTION, {
+    variables: { id: transactionId },
+    skip: formType === "create",
+  });
+
   const form = useForm<z.infer<typeof transactionSchema>>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
-      paymentType: "cash", // Default value for paymentType
-      category: "saving", // Default value for category
-      amount: 0, // Default value for amount
-      description: "", // Default value for description
-      location: "", // Default value for location
+      paymentType: data?.transaction?.paymentType || "cash",
+      category: data?.transaction?.category || "saving",
+      amount: data?.transaction?.amount || 0,
+      description: data?.transaction?.description || "",
+      location: data?.transaction?.location || "",
+      date: new Date(),
+      // date:
+      //   data?.transaction?.date && !isNaN(data.transaction.date)
+      //     ? new Date(data.transaction.date)
+      //     : new Date(),
     },
   });
 
-  const [createTransaction, { loading }] = useMutation(CREATE_TRANSACTION, {
-    refetchQueries: ["GetTransactions"],
-  });
+  const [createTransaction, { loading: createLoading }] = useMutation(
+    CREATE_TRANSACTION,
+    {
+      refetchQueries: ["GetTransactions"],
+    }
+  );
+
+  const [updateTransaction, { loading: updateLoading }] = useMutation(
+    UPDATE_TRANSACTION,
+    {
+      refetchQueries: ["GetTransactions"],
+    }
+  );
 
   const onSubmit = async (values: z.infer<typeof transactionSchema>) => {
-    // console.log(values);
     try {
-      await createTransaction({
-        variables: {
-          input: values,
-        },
-      });
+      if (formType === "Create") {
+        await createTransaction({
+          variables: {
+            input: values,
+          },
+        });
+        toast.success("Transaction created successfully!");
+      } else if (formType === "Update" && transactionId) {
+        await updateTransaction({
+          variables: {
+            input: { ...values, transactionId },
+          },
+        });
+
+        toast.success("Transaction updated successfully!");
+        navigate("/transactions");
+      }
       form.reset();
-      toast.success("Registration successful!");
     } catch (error) {
+      toast.error("Something went wrong. Please try again.");
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (data?.transaction) {
+      form.reset({
+        description: data.transaction.description || "",
+        paymentType: data.transaction.paymentType || "cash",
+        category: data.transaction.category || "saving",
+        amount: data.transaction.amount || 0,
+        location: data.transaction.location || "",
+        date: new Date(),
+        // date: data.transaction.date
+        //   ? new Date(data.transaction.date.seconds * 1000)
+        //   : new Date(),
+      });
+    }
+  }, [data, form]);
+
+  if (fetchLoading && formType === "Update") {
+    return <Loader></Loader>;
+  }
 
   return (
     <Card className="w-full max-w-lg mx-auto">
@@ -258,15 +318,17 @@ const TransactionForm = ({ formType }: TransactionFormProps) => {
               )}
             />
             <Separator></Separator>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? (
-                <>
-                  Subbmitting...
-                  <LoaderCircle className="w-4 h-4 ml-2 animate-spin"></LoaderCircle>
-                </>
-              ) : (
-                <> {formType} Transaction</>
-              )}
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={createLoading || updateLoading}
+            >
+              {createLoading || updateLoading
+                ? "Submitting..."
+                : formType === "Create"
+                ? "Create Transaction"
+                : "Update Transaction"}
             </Button>
           </form>
         </Form>

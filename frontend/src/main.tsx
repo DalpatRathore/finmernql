@@ -40,7 +40,7 @@ const router = createBrowserRouter([
         element: <SignUpPage />,
       },
       {
-        path: "transaction",
+        path: "transaction/:transactionId",
         element: <TransactionPage />,
       },
     ],

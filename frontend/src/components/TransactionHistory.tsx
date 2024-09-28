@@ -38,7 +38,6 @@ import toast from "react-hot-toast";
 
 interface ITransaction {
   _id: string;
-  userId: string;
   description: string;
   paymentType: "cash" | "card";
   category: "saving" | "expense" | "investment";
@@ -61,9 +60,9 @@ const TransactionHistory = () => {
 
   const transactions: ITransaction[] = data?.transactions || [];
 
-  const handleEdit = (userId: string) => {
-    console.log(userId);
-    navigate("/transaction");
+  const handleEdit = (transactionId: string) => {
+    // console.log(transactionId);
+    navigate(`/transaction/${transactionId}`);
   };
   const handleDelete = async (transactionId: string) => {
     try {
@@ -162,7 +161,6 @@ const TransactionHistory = () => {
                             description,
                             location: transactionLocation,
                             paymentType,
-                            userId,
                           } = transaction;
                           const formattedDate = formatDate(date);
                           const location =
@@ -239,7 +237,9 @@ const TransactionHistory = () => {
                                       Actions
                                     </DropdownMenuLabel>
                                     <DropdownMenuItem
-                                      onClick={() => handleEdit(userId)}
+                                      onClick={() =>
+                                        handleEdit(transaction._id)
+                                      }
                                     >
                                       Edit
                                     </DropdownMenuItem>
@@ -261,12 +261,9 @@ const TransactionHistory = () => {
                   </Table>
                   {transactions.length <= 0 && (
                     <div className="p-4 text-center space-y-5 py-10">
-                      <h2 className="text-xl  text-muted-foreground">
+                      <h2 className="text-lg text-muted-foreground">
                         No Transactions
                       </h2>
-                      <p className="text-muted-foreground">
-                        Please add transactions.
-                      </p>
                       <p className="text-muted-foreground font-bold">
                         Spend Nicely, Track Wisely
                       </p>
@@ -333,7 +330,6 @@ const TransactionHistory = () => {
                               description,
                               location: transactionLocation,
                               paymentType,
-                              userId,
                             } = transaction;
                             const formattedDate = formatDate(date);
 
@@ -393,7 +389,9 @@ const TransactionHistory = () => {
                                         Actions
                                       </DropdownMenuLabel>
                                       <DropdownMenuItem
-                                        onClick={() => handleEdit(userId)}
+                                        onClick={() =>
+                                          handleEdit(transaction._id)
+                                        }
                                       >
                                         Edit
                                       </DropdownMenuItem>
@@ -483,7 +481,6 @@ const TransactionHistory = () => {
                               description,
                               location: transactionLocation,
                               paymentType,
-                              userId,
                             } = transaction;
                             const formattedDate = formatDate(date);
                             const location =
@@ -542,7 +539,9 @@ const TransactionHistory = () => {
                                         Actions
                                       </DropdownMenuLabel>
                                       <DropdownMenuItem
-                                        onClick={() => handleEdit(userId)}
+                                        onClick={() =>
+                                          handleEdit(transaction._id)
+                                        }
                                       >
                                         Edit
                                       </DropdownMenuItem>
@@ -632,7 +631,6 @@ const TransactionHistory = () => {
                               description,
                               location: transactionLocation,
                               paymentType,
-                              userId,
                             } = transaction;
                             const formattedDate = formatDate(date);
 
@@ -692,7 +690,9 @@ const TransactionHistory = () => {
                                         Actions
                                       </DropdownMenuLabel>
                                       <DropdownMenuItem
-                                        onClick={() => handleEdit(userId)}
+                                        onClick={() =>
+                                          handleEdit(transaction._id)
+                                        }
                                       >
                                         Edit
                                       </DropdownMenuItem>
