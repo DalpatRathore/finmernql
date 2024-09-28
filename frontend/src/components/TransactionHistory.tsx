@@ -77,7 +77,7 @@ const TransactionHistory = () => {
 
   return (
     <div className="flex w-full max-w-7xl mx-auto flex-col border rounded-xl shadow">
-      <div className="flex flex-col sm:gap-4 sm:py-4">
+      <div className="flex flex-col sm:gap-4 sm:p-4">
         <main className="grid flex-1 items-start gap-4 p-4 md:gap-8">
           <Tabs defaultValue="all">
             <div className="flex items-center">
@@ -93,6 +93,8 @@ const TransactionHistory = () => {
                 </Button>
               </div>
             </div>
+
+            {/* All Data Tab */}
             <TabsContent value="all" className="mt-5">
               <Card>
                 <CardHeader>
@@ -109,7 +111,9 @@ const TransactionHistory = () => {
                           <span className="sr-only">Image</span>
                         </TableHead>
                         <TableHead>Description</TableHead>
-                        <TableHead>Payment Type</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Payment Type
+                        </TableHead>
                         <TableHead>Category</TableHead>
                         <TableHead>Amount</TableHead>
                         <TableHead className="hidden md:table-cell">
@@ -154,7 +158,7 @@ const TransactionHistory = () => {
                               <TableCell className="font-medium">
                                 {description}
                               </TableCell>
-                              <TableCell className="capitalize">
+                              <TableCell className="hidden sm:table-cell capitalize">
                                 {paymentType}
                               </TableCell>
                               <TableCell>
@@ -168,16 +172,16 @@ const TransactionHistory = () => {
                                 )}
                                 {category === "investment" && (
                                   <Badge
-                                    variant="default"
-                                    className="capitalize"
+                                    variant="investment"
+                                    className="capitalize text-white"
                                   >
                                     {category}
                                   </Badge>
                                 )}
                                 {category === "saving" && (
                                   <Badge
-                                    variant="outline"
-                                    className="capitalize"
+                                    variant="saving"
+                                    className="capitalize text-white"
                                   >
                                     {category}
                                   </Badge>
@@ -220,6 +224,396 @@ const TransactionHistory = () => {
                             </TableRow>
                           );
                         })}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+                <CardFooter>
+                  <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-2</strong> of <strong>2</strong>{" "}
+                    transactions
+                  </div>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
+            {/* Saving Data Tab */}
+            <TabsContent value="savings" className="mt-5">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Transaction History</CardTitle>
+                  <CardDescription>
+                    Manage your transactions and view their details.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="hidden w-[100px] sm:table-cell">
+                          <span className="sr-only">Image</span>
+                        </TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Payment Type
+                        </TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Date
+                        </TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Location
+                        </TableHead>
+                        <TableHead>
+                          <span className="sr-only">Actions</span>
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {/* Sample transaction data */}
+                      {loading && <SkeletonLoader></SkeletonLoader>}
+
+                      {!loading &&
+                        transactions
+                          .filter(
+                            transaction => transaction.category === "saving"
+                          )
+                          .map(transaction => {
+                            const {
+                              _id,
+                              amount,
+                              category,
+                              date,
+                              description,
+                              location,
+                              paymentType,
+                              userId,
+                            } = transaction;
+                            const formattedDate = formatDate(date);
+                            return (
+                              <TableRow key={_id}>
+                                <TableCell className="hidden sm:table-cell">
+                                  <img
+                                    alt="Transaction image"
+                                    className="aspect-square rounded-full object-cover"
+                                    height="64"
+                                    width="64"
+                                    src="/placeholder.png"
+                                  />
+                                </TableCell>
+                                <TableCell className="font-medium">
+                                  {description}
+                                </TableCell>
+                                <TableCell className="hidden sm:table-cell capitalize">
+                                  {paymentType}
+                                </TableCell>
+                                <TableCell>
+                                  <Badge
+                                    variant="saving"
+                                    className="capitalize text-white"
+                                  >
+                                    {category}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell>${amount}</TableCell>
+                                <TableCell className="hidden md:table-cell">
+                                  {formattedDate}
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell">
+                                  {location}
+                                </TableCell>
+                                <TableCell>
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button
+                                        aria-haspopup="true"
+                                        size="icon"
+                                        variant="ghost"
+                                      >
+                                        <MoreHorizontal className="h-4 w-4" />
+                                        <span className="sr-only">
+                                          Toggle menu
+                                        </span>
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                      <DropdownMenuLabel>
+                                        Actions
+                                      </DropdownMenuLabel>
+                                      <DropdownMenuItem
+                                        onClick={() => handleClick(userId)}
+                                      >
+                                        Edit
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem>
+                                        Delete
+                                      </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+                <CardFooter>
+                  <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-2</strong> of <strong>2</strong>{" "}
+                    transactions
+                  </div>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
+            {/* Expense Data Tab */}
+            <TabsContent value="expenses" className="mt-5">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Transaction History</CardTitle>
+                  <CardDescription>
+                    Manage your transactions and view their details.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="hidden w-[100px] sm:table-cell">
+                          <span className="sr-only">Image</span>
+                        </TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Payment Type
+                        </TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Date
+                        </TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Location
+                        </TableHead>
+                        <TableHead>
+                          <span className="sr-only">Actions</span>
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {/* Sample transaction data */}
+                      {loading && <SkeletonLoader></SkeletonLoader>}
+
+                      {!loading &&
+                        transactions
+                          .filter(
+                            transaction => transaction.category === "expense"
+                          )
+                          .map(transaction => {
+                            const {
+                              _id,
+                              amount,
+                              category,
+                              date,
+                              description,
+                              location,
+                              paymentType,
+                              userId,
+                            } = transaction;
+                            const formattedDate = formatDate(date);
+                            return (
+                              <TableRow key={_id}>
+                                <TableCell className="hidden sm:table-cell">
+                                  <img
+                                    alt="Transaction image"
+                                    className="aspect-square rounded-full object-cover"
+                                    height="64"
+                                    width="64"
+                                    src="/placeholder.png"
+                                  />
+                                </TableCell>
+                                <TableCell className="font-medium">
+                                  {description}
+                                </TableCell>
+                                <TableCell className="hidden sm:table-cell capitalize">
+                                  {paymentType}
+                                </TableCell>
+                                <TableCell>
+                                  <Badge
+                                    variant="destructive"
+                                    className="capitalize"
+                                  >
+                                    {category}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell>${amount}</TableCell>
+                                <TableCell className="hidden md:table-cell">
+                                  {formattedDate}
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell">
+                                  {location}
+                                </TableCell>
+                                <TableCell>
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button
+                                        aria-haspopup="true"
+                                        size="icon"
+                                        variant="ghost"
+                                      >
+                                        <MoreHorizontal className="h-4 w-4" />
+                                        <span className="sr-only">
+                                          Toggle menu
+                                        </span>
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                      <DropdownMenuLabel>
+                                        Actions
+                                      </DropdownMenuLabel>
+                                      <DropdownMenuItem
+                                        onClick={() => handleClick(userId)}
+                                      >
+                                        Edit
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem>
+                                        Delete
+                                      </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+                <CardFooter>
+                  <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-2</strong> of <strong>2</strong>{" "}
+                    transactions
+                  </div>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
+            {/* Investments Data Tab */}
+            <TabsContent value="investments" className="mt-5">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Transaction History</CardTitle>
+                  <CardDescription>
+                    Manage your transactions and view their details.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="hidden w-[100px] sm:table-cell">
+                          <span className="sr-only">Image</span>
+                        </TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Payment Type
+                        </TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Date
+                        </TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Location
+                        </TableHead>
+                        <TableHead>
+                          <span className="sr-only">Actions</span>
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {/* Sample transaction data */}
+                      {loading && <SkeletonLoader></SkeletonLoader>}
+
+                      {!loading &&
+                        transactions
+                          .filter(
+                            transaction => transaction.category === "investment"
+                          )
+                          .map(transaction => {
+                            const {
+                              _id,
+                              amount,
+                              category,
+                              date,
+                              description,
+                              location,
+                              paymentType,
+                              userId,
+                            } = transaction;
+                            const formattedDate = formatDate(date);
+                            return (
+                              <TableRow key={_id}>
+                                <TableCell className="hidden sm:table-cell">
+                                  <img
+                                    alt="Transaction image"
+                                    className="aspect-square rounded-full object-cover"
+                                    height="64"
+                                    width="64"
+                                    src="/placeholder.png"
+                                  />
+                                </TableCell>
+                                <TableCell className="font-medium">
+                                  {description}
+                                </TableCell>
+                                <TableCell className="hidden sm:table-cell capitalize">
+                                  {paymentType}
+                                </TableCell>
+                                <TableCell>
+                                  <Badge
+                                    variant="investment"
+                                    className="capitalize text-white"
+                                  >
+                                    {category}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell>${amount}</TableCell>
+                                <TableCell className="hidden md:table-cell">
+                                  {formattedDate}
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell">
+                                  {location}
+                                </TableCell>
+                                <TableCell>
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button
+                                        aria-haspopup="true"
+                                        size="icon"
+                                        variant="ghost"
+                                      >
+                                        <MoreHorizontal className="h-4 w-4" />
+                                        <span className="sr-only">
+                                          Toggle menu
+                                        </span>
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                      <DropdownMenuLabel>
+                                        Actions
+                                      </DropdownMenuLabel>
+                                      <DropdownMenuItem
+                                        onClick={() => handleClick(userId)}
+                                      >
+                                        Edit
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem>
+                                        Delete
+                                      </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
                     </TableBody>
                   </Table>
                 </CardContent>
