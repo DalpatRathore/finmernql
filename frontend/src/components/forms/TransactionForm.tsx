@@ -27,10 +27,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, LoaderCircle } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
+import { useMutation } from "@apollo/client";
+import { CREATE_TRANSACTION } from "@/graphql/mutations/transaction.mutation";
+import toast from "react-hot-toast";
 
 const transactionSchema = z.object({
   description: z
@@ -69,14 +72,32 @@ type TransactionFormProps = {
 const TransactionForm = ({ formType }: TransactionFormProps) => {
   const form = useForm<z.infer<typeof transactionSchema>>({
     resolver: zodResolver(transactionSchema),
-    // defaultValues: {
-    //   username: "",
-    //   password: "",
-    // },
+    defaultValues: {
+      paymentType: "cash", // Default value for paymentType
+      category: "saving", // Default value for category
+      amount: 0, // Default value for amount
+      description: "", // Default value for description
+      location: "", // Default value for location
+    },
   });
 
-  const onSubmit = (values: z.infer<typeof transactionSchema>) => {
-    console.log(values);
+  const [createTransaction, { loading }] = useMutation(CREATE_TRANSACTION, {
+    refetchQueries: ["GetTransactions"],
+  });
+
+  const onSubmit = async (values: z.infer<typeof transactionSchema>) => {
+    // console.log(values);
+    try {
+      await createTransaction({
+        variables: {
+          input: values,
+        },
+      });
+      form.reset();
+      toast.success("Registration successful!");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -164,7 +185,7 @@ const TransactionForm = ({ formType }: TransactionFormProps) => {
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="shadcn"
+                        placeholder="100.50"
                         {...field}
                         onChange={e => {
                           const value = parseFloat(e.target.value); // Convert input to number
@@ -237,8 +258,15 @@ const TransactionForm = ({ formType }: TransactionFormProps) => {
               )}
             />
             <Separator></Separator>
-            <Button type="submit" className="w-full">
-              {formType} Transaction
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? (
+                <>
+                  Subbmitting...
+                  <LoaderCircle className="w-4 h-4 ml-2 animate-spin"></LoaderCircle>
+                </>
+              ) : (
+                <> {formType} Transaction</>
+              )}
             </Button>
           </form>
         </Form>
