@@ -97,20 +97,6 @@ const TransactionHistory = () => {
     );
   }
 
-  if (transactions.length <= 0) {
-    return (
-      <div className="flex w-full max-w-7xl mx-auto flex-col border rounded-xl shadow">
-        <div className="p-4 text-center space-y-5 py-10">
-          <h2 className="text-xl  text-muted-foreground">No Transactions</h2>
-          <p className="text-muted-foreground">Please add transactions.</p>
-          <p className="text-muted-foreground font-bold">
-            Spend Nicely, Track Wisely
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex w-full max-w-7xl mx-auto flex-col border rounded-xl shadow">
       <div className="flex flex-col sm:gap-4 sm:p-4">
@@ -164,7 +150,6 @@ const TransactionHistory = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {/* Sample transaction data */}
                       {loading && <SkeletonLoader></SkeletonLoader>}
 
                       {!loading &&
@@ -175,11 +160,16 @@ const TransactionHistory = () => {
                             category,
                             date,
                             description,
-                            location,
+                            location: transactionLocation,
                             paymentType,
                             userId,
                           } = transaction;
                           const formattedDate = formatDate(date);
+                          const location =
+                            transactionLocation &&
+                            transactionLocation.trim() !== ""
+                              ? transactionLocation
+                              : "N/A";
                           return (
                             <TableRow key={_id}>
                               <TableCell className="hidden sm:table-cell">
@@ -269,6 +259,19 @@ const TransactionHistory = () => {
                         })}
                     </TableBody>
                   </Table>
+                  {transactions.length <= 0 && (
+                    <div className="p-4 text-center space-y-5 py-10">
+                      <h2 className="text-xl  text-muted-foreground">
+                        No Transactions
+                      </h2>
+                      <p className="text-muted-foreground">
+                        Please add transactions.
+                      </p>
+                      <p className="text-muted-foreground font-bold">
+                        Spend Nicely, Track Wisely
+                      </p>
+                    </div>
+                  )}
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">
@@ -328,11 +331,17 @@ const TransactionHistory = () => {
                               category,
                               date,
                               description,
-                              location,
+                              location: transactionLocation,
                               paymentType,
                               userId,
                             } = transaction;
                             const formattedDate = formatDate(date);
+
+                            const location =
+                              transactionLocation &&
+                              transactionLocation.trim() !== ""
+                                ? transactionLocation
+                                : "N/A";
                             return (
                               <TableRow key={_id}>
                                 <TableCell className="hidden sm:table-cell">
@@ -388,7 +397,12 @@ const TransactionHistory = () => {
                                       >
                                         Edit
                                       </DropdownMenuItem>
-                                      <DropdownMenuItem>
+                                      <DropdownMenuItem
+                                        onClick={() =>
+                                          handleDelete(transaction._id)
+                                        }
+                                        disabled={deleteLoading}
+                                      >
                                         Delete
                                       </DropdownMenuItem>
                                     </DropdownMenuContent>
@@ -399,6 +413,15 @@ const TransactionHistory = () => {
                           })}
                     </TableBody>
                   </Table>
+                  {transactions.filter(
+                    transaction => transaction.category === "saving"
+                  ).length <= 0 && (
+                    <div className="p-4 text-center space-y-5 py-10">
+                      <p className="text-sm text-muted-foreground">
+                        No Transactions
+                      </p>
+                    </div>
+                  )}
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">
@@ -458,11 +481,16 @@ const TransactionHistory = () => {
                               category,
                               date,
                               description,
-                              location,
+                              location: transactionLocation,
                               paymentType,
                               userId,
                             } = transaction;
                             const formattedDate = formatDate(date);
+                            const location =
+                              transactionLocation &&
+                              transactionLocation.trim() !== ""
+                                ? transactionLocation
+                                : "N/A";
                             return (
                               <TableRow key={_id}>
                                 <TableCell className="hidden sm:table-cell">
@@ -518,7 +546,12 @@ const TransactionHistory = () => {
                                       >
                                         Edit
                                       </DropdownMenuItem>
-                                      <DropdownMenuItem>
+                                      <DropdownMenuItem
+                                        onClick={() =>
+                                          handleDelete(transaction._id)
+                                        }
+                                        disabled={deleteLoading}
+                                      >
                                         Delete
                                       </DropdownMenuItem>
                                     </DropdownMenuContent>
@@ -529,6 +562,15 @@ const TransactionHistory = () => {
                           })}
                     </TableBody>
                   </Table>
+                  {transactions.filter(
+                    transaction => transaction.category === "expense"
+                  ).length <= 0 && (
+                    <div className="p-4 text-center space-y-5 py-10">
+                      <p className="text-sm text-muted-foreground">
+                        No Transactions
+                      </p>
+                    </div>
+                  )}
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">
@@ -588,11 +630,17 @@ const TransactionHistory = () => {
                               category,
                               date,
                               description,
-                              location,
+                              location: transactionLocation,
                               paymentType,
                               userId,
                             } = transaction;
                             const formattedDate = formatDate(date);
+
+                            const location =
+                              transactionLocation &&
+                              transactionLocation.trim() !== ""
+                                ? transactionLocation
+                                : "N/A";
                             return (
                               <TableRow key={_id}>
                                 <TableCell className="hidden sm:table-cell">
@@ -648,7 +696,12 @@ const TransactionHistory = () => {
                                       >
                                         Edit
                                       </DropdownMenuItem>
-                                      <DropdownMenuItem>
+                                      <DropdownMenuItem
+                                        onClick={() =>
+                                          handleDelete(transaction._id)
+                                        }
+                                        disabled={deleteLoading}
+                                      >
                                         Delete
                                       </DropdownMenuItem>
                                     </DropdownMenuContent>
@@ -659,6 +712,15 @@ const TransactionHistory = () => {
                           })}
                     </TableBody>
                   </Table>
+                  {transactions.filter(
+                    transaction => transaction.category === "investment"
+                  ).length <= 0 && (
+                    <div className="p-4 text-center space-y-5 py-10">
+                      <p className="text-sm text-muted-foreground">
+                        No Transactions
+                      </p>
+                    </div>
+                  )}
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">
