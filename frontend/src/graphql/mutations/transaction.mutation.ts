@@ -31,9 +31,12 @@ mutation UpdateTransaction($input:UpdateTransactionInput!){
 `
 
 export const DELETE_TRANSACTION = gql`
-
-mutation DeleteTransaction($transactionId: ID!){
-    deleteTransaction(transactionId: $transactionId)
-    _id
-}
-`
+  mutation DeleteTransaction($transactionId: ID!) {
+    deleteTransaction(transactionId: $transactionId) {
+      _id    
+      description
+      amount
+      category
+    }
+  }
+`;

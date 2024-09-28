@@ -30,9 +30,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_TRANSACTIONS } from "@/graphql/queries/transaction.query";
 import { Skeleton } from "./ui/skeleton";
+import { DELETE_TRANSACTION } from "@/graphql/mutations/transaction.mutation";
+import toast from "react-hot-toast";
 
 interface ITransaction {
   _id: string;
@@ -50,11 +52,31 @@ const TransactionHistory = () => {
 
   const { data, loading, error } = useQuery(GET_TRANSACTIONS);
 
+  const [deleteTransaction, { loading: deleteLoading }] = useMutation(
+    DELETE_TRANSACTION,
+    {
+      refetchQueries: ["GetTransactions"],
+    }
+  );
+
   const transactions: ITransaction[] = data?.transactions || [];
 
-  const handleClick = (userId: string) => {
+  const handleEdit = (userId: string) => {
     console.log(userId);
     navigate("/transaction");
+  };
+  const handleDelete = async (transactionId: string) => {
+    try {
+      await deleteTransaction({
+        variables: {
+          transactionId,
+        },
+      });
+      toast.success("Transaction deleted!");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong!");
+    }
   };
 
   const formatDate = (timestamp: string) => {
@@ -69,6 +91,20 @@ const TransactionHistory = () => {
           <h2 className="text-xl font-bold">Error Loading Transactions</h2>
           <p className="text-red-600">
             Failed to load transactions data. Please try again later.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (transactions.length <= 0) {
+    return (
+      <div className="flex w-full max-w-7xl mx-auto flex-col border rounded-xl shadow">
+        <div className="p-4 text-center space-y-5 py-10">
+          <h2 className="text-xl  text-muted-foreground">No Transactions</h2>
+          <p className="text-muted-foreground">Please add transactions.</p>
+          <p className="text-muted-foreground font-bold">
+            Spend Nicely, Track Wisely
           </p>
         </div>
       </div>
@@ -213,11 +249,18 @@ const TransactionHistory = () => {
                                       Actions
                                     </DropdownMenuLabel>
                                     <DropdownMenuItem
-                                      onClick={() => handleClick(userId)}
+                                      onClick={() => handleEdit(userId)}
                                     >
                                       Edit
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleDelete(transaction._id)
+                                      }
+                                      disabled={deleteLoading}
+                                    >
+                                      Delete
+                                    </DropdownMenuItem>
                                   </DropdownMenuContent>
                                 </DropdownMenu>
                               </TableCell>
@@ -341,7 +384,7 @@ const TransactionHistory = () => {
                                         Actions
                                       </DropdownMenuLabel>
                                       <DropdownMenuItem
-                                        onClick={() => handleClick(userId)}
+                                        onClick={() => handleEdit(userId)}
                                       >
                                         Edit
                                       </DropdownMenuItem>
@@ -471,7 +514,7 @@ const TransactionHistory = () => {
                                         Actions
                                       </DropdownMenuLabel>
                                       <DropdownMenuItem
-                                        onClick={() => handleClick(userId)}
+                                        onClick={() => handleEdit(userId)}
                                       >
                                         Edit
                                       </DropdownMenuItem>
@@ -601,7 +644,7 @@ const TransactionHistory = () => {
                                         Actions
                                       </DropdownMenuLabel>
                                       <DropdownMenuItem
-                                        onClick={() => handleClick(userId)}
+                                        onClick={() => handleEdit(userId)}
                                       >
                                         Edit
                                       </DropdownMenuItem>
