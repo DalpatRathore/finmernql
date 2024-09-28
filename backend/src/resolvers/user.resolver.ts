@@ -52,9 +52,9 @@ const userResolver = {
         const hashedPassword = await bcrypt.hash(password, salt);
         let profilePicture = "";
         if (gender === "male") {
-          profilePicture = "https://avatar.iran.liara.run/public/boy";
+          profilePicture = "https://avatar.iran.liara.run/public/boy?username=${username}";
         } else if (gender === "female") {
-          profilePicture = "https://avatar.iran.liara.run/public/girl";
+          profilePicture = "https://avatar.iran.liara.run/public/girl?username=${username}";
         }
 
         const newUser = new User({
