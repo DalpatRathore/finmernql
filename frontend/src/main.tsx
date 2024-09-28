@@ -10,6 +10,7 @@ import HomePage from "./pages/HomePage.tsx";
 import TransactionPage from "./pages/TransactionPage.tsx";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import TransactionsPage from "./pages/TransactionsPage.tsx";
 
 const client = new ApolloClient({
   // TODO => Update the uri on production
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUpPage />,
+      },
+      {
+        path: "transactions",
+        element: <TransactionsPage />,
       },
       {
         path: "transaction/:transactionId",

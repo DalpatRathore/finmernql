@@ -26,7 +26,7 @@ const Header = () => {
   };
 
   return (
-    <header className="border-b border-gray-200">
+    <header className="border-b">
       <div className="mx-auto max-w-screen-xl px-4 py-8">
         <div className="w-full flex gap-4 items-center justify-between">
           <Link to={"/"} className="flex items-center justify-center gap-2">
