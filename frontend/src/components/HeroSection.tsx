@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
 const HeroSection = () => {
   return (
@@ -9,7 +10,7 @@ const HeroSection = () => {
         <div className="max-w-xl text-center space-y-5">
           <h2 className="text-3xl font-extrabold text-white sm:text-3xl">
             Take Control of Your Finances with
-            <strong className="block font-extrabold text-rose-500">
+            <strong className="block font-extrabold text-slate-500">
               MERN Expense Tracker
             </strong>
           </h2>
@@ -20,12 +21,9 @@ const HeroSection = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-5">
-            <Link
-              to="/login"
-              className="block w-full rounded bg-rose-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-rose-700 focus:outline-none focus:ring active:bg-rose-500 sm:w-auto"
-            >
-              Get Started
-            </Link>
+            <Button variant={"outline"} asChild size={"lg"}>
+              <Link to="/signup">Get Started</Link>
+            </Button>
           </div>
         </div>
       </div>

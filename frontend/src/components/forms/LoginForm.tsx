@@ -12,13 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
 import { LOGIN } from "@/graphql/mutations/user.mutation";
 import { useMutation } from "@apollo/client";
@@ -70,9 +64,6 @@ export function LoginForm() {
     <Card className="w-full mx-auto max-w-xl">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
       </CardHeader>
       {error && (
         <div className="w-full flex items-center justify-center">

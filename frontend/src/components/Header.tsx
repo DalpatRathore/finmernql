@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Loader2, LogOut, SquareArrowOutUpRight } from "lucide-react";
 import { useMutation, useQuery } from "@apollo/client";
@@ -10,6 +10,8 @@ import UserAccount from "./UserAccount";
 
 const Header = () => {
   const { data } = useQuery(GET_AUTHENTICATED_USER);
+
+  const location = useLocation();
 
   const [logout, { loading }] = useMutation(LOGOUT, {
     refetchQueries: ["GetAuthenticatedUser"],
@@ -52,15 +54,20 @@ const Header = () => {
                   )}
                 </Button>
               </>
+            ) : location.pathname === "/login" ? (
+              <Link to={"/signup"}>
+                <Button size={"lg"} variant={"outline"}>
+                  Register
+                  <SquareArrowOutUpRight className="w-4 h-4 ml-2"></SquareArrowOutUpRight>
+                </Button>
+              </Link>
             ) : (
-              <>
-                <Link to={"/login"}>
-                  <Button size={"lg"} variant={"outline"}>
-                    Login
-                    <SquareArrowOutUpRight className="w-4 h-4 ml-2"></SquareArrowOutUpRight>
-                  </Button>
-                </Link>
-              </>
+              <Link to={"/login"}>
+                <Button size={"lg"} variant={"outline"}>
+                  Login
+                  <SquareArrowOutUpRight className="w-4 h-4 ml-2"></SquareArrowOutUpRight>
+                </Button>
+              </Link>
             )}
             <ThemeToggle></ThemeToggle>
           </div>

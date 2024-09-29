@@ -38,7 +38,7 @@ const formSchema = z
 
     gender: z.enum(["male", "female"], {
       errorMap: () => ({
-        message: "Gender must be either 'male' or 'female'.",
+        message: "Please select gender",
       }),
     }),
 

@@ -12,7 +12,16 @@ const SignUpPage = () => {
     return <Navigate to="/" />;
   }
   return (
-    <div className="flex justify-center p-5">
+    <div className="w-full h-full max-w-7xl mx-auto py-5 flex flex-col-reverse lg:flex-row items-center justify-center">
+      <div className="w-full">
+        <div className="md:h-[400px] p-2 hidden lg:block">
+          <img
+            src="/management-img.webp"
+            className="w-full h-full object-contain rounded-lg"
+            alt=""
+          />
+        </div>
+      </div>
       <div className="w-full">
         <SignupForm></SignupForm>
       </div>

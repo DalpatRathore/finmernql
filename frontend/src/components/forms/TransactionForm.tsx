@@ -41,6 +41,7 @@ import { GET_TRANSACTION } from "@/graphql/queries/transaction.query";
 import Loader from "../Loader";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import DashboardButton from "../DashboardButton";
 
 const transactionSchema = z.object({
   description: z
@@ -131,9 +132,9 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
         });
 
         toast.success("Transaction updated successfully!");
-        navigate("/transactions");
       }
       form.reset();
+      navigate("/transactions");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
       console.log(error);
@@ -168,15 +169,7 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
             <p className="text-lg font-semibold">No record found!</p>
           </CardContent>
         </Card>
-        <div className="mt-10 flex items-center justify-center">
-          <Button
-            variant={"outline"}
-            onClick={() => navigate("/")}
-            className=""
-          >
-            Back to Dashboard
-          </Button>
-        </div>
+        <DashboardButton></DashboardButton>
       </div>
     );
   }

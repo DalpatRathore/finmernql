@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import DashboardButton from "@/components/DashboardButton";
 
 const TransactionPage = () => {
   const { transactionId } = useParams(); // Extract transactionId from the URL
@@ -25,11 +26,23 @@ const TransactionPage = () => {
   }
 
   return (
-    <div className="w-full h-full max-w-7xl mx-auto py-3 space-y-8 flex flex-col items-center justify-center">
-      <TransactionForm
-        formType="Update"
-        transactionId={transactionId}
-      ></TransactionForm>
+    <div className="w-full h-full max-w-7xl mx-auto py-5 flex flex-col-reverse lg:flex-row items-center justify-center">
+      <div className="w-full">
+        <div className="md:h-[400px] p-2 hidden lg:block">
+          <img
+            src="/management-img.webp"
+            className="w-full h-full object-contain rounded-lg"
+            alt=""
+          />
+        </div>
+        <DashboardButton></DashboardButton>
+      </div>
+      <div className="w-full">
+        <TransactionForm
+          formType="Update"
+          transactionId={transactionId}
+        ></TransactionForm>
+      </div>
     </div>
   );
 };

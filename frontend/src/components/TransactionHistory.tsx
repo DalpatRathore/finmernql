@@ -1,4 +1,4 @@
-import { ListFilter, MoreHorizontal } from "lucide-react";
+import { Edit, ListFilter, MoreHorizontal, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 
@@ -18,6 +18,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -236,20 +237,24 @@ const TransactionHistory = () => {
                                     <DropdownMenuLabel>
                                       Actions
                                     </DropdownMenuLabel>
+                                    <DropdownMenuSeparator></DropdownMenuSeparator>
                                     <DropdownMenuItem
                                       onClick={() =>
                                         handleEdit(transaction._id)
                                       }
+                                      className="flex items-center justify-between"
                                     >
-                                      Edit
+                                      Edit <Edit className="w-4 h-4"></Edit>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                       onClick={() =>
                                         handleDelete(transaction._id)
                                       }
                                       disabled={deleteLoading}
+                                      className="flex items-center justify-between"
                                     >
                                       Delete
+                                      <Trash2 className="w-4 h-4"></Trash2>
                                     </DropdownMenuItem>
                                   </DropdownMenuContent>
                                 </DropdownMenu>
@@ -384,24 +389,29 @@ const TransactionHistory = () => {
                                         </span>
                                       </Button>
                                     </DropdownMenuTrigger>
+
                                     <DropdownMenuContent align="end">
                                       <DropdownMenuLabel>
                                         Actions
                                       </DropdownMenuLabel>
+                                      <DropdownMenuSeparator></DropdownMenuSeparator>
                                       <DropdownMenuItem
                                         onClick={() =>
                                           handleEdit(transaction._id)
                                         }
+                                        className="flex items-center justify-between"
                                       >
-                                        Edit
+                                        Edit <Edit className="w-4 h-4"></Edit>
                                       </DropdownMenuItem>
                                       <DropdownMenuItem
                                         onClick={() =>
                                           handleDelete(transaction._id)
                                         }
                                         disabled={deleteLoading}
+                                        className="flex items-center justify-between"
                                       >
                                         Delete
+                                        <Trash2 className="w-4 h-4"></Trash2>
                                       </DropdownMenuItem>
                                     </DropdownMenuContent>
                                   </DropdownMenu>
@@ -538,20 +548,24 @@ const TransactionHistory = () => {
                                       <DropdownMenuLabel>
                                         Actions
                                       </DropdownMenuLabel>
+                                      <DropdownMenuSeparator></DropdownMenuSeparator>
                                       <DropdownMenuItem
                                         onClick={() =>
                                           handleEdit(transaction._id)
                                         }
+                                        className="flex items-center justify-between"
                                       >
-                                        Edit
+                                        Edit <Edit className="w-4 h-4"></Edit>
                                       </DropdownMenuItem>
                                       <DropdownMenuItem
                                         onClick={() =>
                                           handleDelete(transaction._id)
                                         }
                                         disabled={deleteLoading}
+                                        className="flex items-center justify-between"
                                       >
                                         Delete
+                                        <Trash2 className="w-4 h-4"></Trash2>
                                       </DropdownMenuItem>
                                     </DropdownMenuContent>
                                   </DropdownMenu>
@@ -689,20 +703,24 @@ const TransactionHistory = () => {
                                       <DropdownMenuLabel>
                                         Actions
                                       </DropdownMenuLabel>
+                                      <DropdownMenuSeparator></DropdownMenuSeparator>
                                       <DropdownMenuItem
                                         onClick={() =>
                                           handleEdit(transaction._id)
                                         }
+                                        className="flex items-center justify-between"
                                       >
-                                        Edit
+                                        Edit <Edit className="w-4 h-4"></Edit>
                                       </DropdownMenuItem>
                                       <DropdownMenuItem
                                         onClick={() =>
                                           handleDelete(transaction._id)
                                         }
                                         disabled={deleteLoading}
+                                        className="flex items-center justify-between"
                                       >
                                         Delete
+                                        <Trash2 className="w-4 h-4"></Trash2>
                                       </DropdownMenuItem>
                                     </DropdownMenuContent>
                                   </DropdownMenu>
