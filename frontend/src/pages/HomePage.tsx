@@ -29,7 +29,7 @@ const HomePage = () => {
               <ChartCard></ChartCard>
             </div>
             <div className="w-full h-full">
-              <TransactionForm formType="Add"></TransactionForm>
+              <TransactionForm formType="Create"></TransactionForm>
             </div>
           </div>
 

@@ -160,6 +160,27 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
     return <Loader></Loader>;
   }
 
+  if (formType === "Update" && !data?.transaction) {
+    return (
+      <div className="w-full max-w-lg mx-auto">
+        <Card className="text-center h-32 flex items-center justify-center">
+          <CardContent className="p-0">
+            <p className="text-lg font-semibold">No record found!</p>
+          </CardContent>
+        </Card>
+        <div className="mt-10 flex items-center justify-center">
+          <Button
+            variant={"outline"}
+            onClick={() => navigate("/")}
+            className=""
+          >
+            Back to Dashboard
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
