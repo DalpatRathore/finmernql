@@ -55,7 +55,7 @@ const TransactionHistory = () => {
   const [deleteTransaction, { loading: deleteLoading }] = useMutation(
     DELETE_TRANSACTION,
     {
-      refetchQueries: ["GetTransactions"],
+      refetchQueries: ["GetTransactions", "GetTransactionStatistics"],
     }
   );
 
@@ -110,7 +110,12 @@ const TransactionHistory = () => {
                 <TabsTrigger value="investments">Investments</TabsTrigger>
               </TabsList>
               <div className="ml-auto flex items-center gap-2">
-                <Button variant="outline" size="sm" className="h-7 gap-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-7 gap-1"
+                  onClick={() => navigate("/transactions")}
+                >
                   <ListFilter className="h-4 w-4" />
                 </Button>
               </div>

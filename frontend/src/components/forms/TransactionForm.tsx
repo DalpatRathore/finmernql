@@ -59,7 +59,7 @@ const transactionSchema = z.object({
 
   amount: z
     .number()
-    .min(0, { message: "Amount cannot be negative." })
+    .min(1, { message: "Amount should be positive." })
     .refine(Number.isFinite, { message: "Amount must be a valid number." }),
 
   location: z
@@ -103,19 +103,18 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
   const [createTransaction, { loading: createLoading }] = useMutation(
     CREATE_TRANSACTION,
     {
-      refetchQueries: ["GetTransactions"],
+      refetchQueries: ["GetTransactions", "GetTransactionStatistics"],
     }
   );
 
   const [updateTransaction, { loading: updateLoading }] = useMutation(
     UPDATE_TRANSACTION,
     {
-      refetchQueries: ["GetTransactions"],
+      refetchQueries: ["GetTransactions", "GetTransactionStatistics"],
     }
   );
 
   const onSubmit = async (values: z.infer<typeof transactionSchema>) => {
-    console.log(values.date);
     try {
       if (formType === "Create") {
         await createTransaction({
@@ -134,7 +133,7 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
         toast.success("Transaction updated successfully!");
       }
       form.reset();
-      navigate("/transactions");
+      navigate("/");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
       console.log(error);
