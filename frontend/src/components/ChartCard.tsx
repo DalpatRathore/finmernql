@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+import {
+  CalendarDaysIcon,
+  MinusIcon,
+  TrendingDownIcon,
+  TrendingUpIcon,
+} from "lucide-react";
 import { Label, Pie, PieChart } from "recharts";
 
 import {
@@ -77,16 +82,36 @@ const getMonthDifference = (startDate: Date, currentDate: Date) => {
   return (currentYear - startYear) * 12 + (currentMonth - startMonth);
 };
 
+// Use chartConfig to set up the initial state correctly
+const initialChartData: {
+  category: Category;
+  totalAmount: number;
+  fill: string;
+}[] = [
+  { category: "saving", totalAmount: 1, fill: chartConfig.saving.color },
+  {
+    category: "investment",
+    totalAmount: 1,
+    fill: chartConfig.investment.color,
+  },
+  { category: "expense", totalAmount: 1, fill: chartConfig.expense.color },
+];
+
 const ChartCard = () => {
-  const [chartData, setChartData] = useState<
-    { category: Category; totalAmount: number; fill: string }[]
-  >([]);
+  const [chartData, setChartData] =
+    useState<{ category: Category; totalAmount: number; fill: string }[]>(
+      initialChartData
+    );
   const { data: statsData, loading: statsLoading } = useQuery(
     GET_TRANSACTIONS_STATISTICS
   );
 
   useEffect(() => {
-    if (statsData?.categoryStatistics) {
+    if (
+      statsData?.categoryStatistics &&
+      statsData.categoryStatistics.length > 0
+    ) {
+      console.log("hell");
       const formattedData = statsData.categoryStatistics.map(
         (stat: { category: string; totalAmount: number }) => {
           // Type check to ensure the category is valid
@@ -101,6 +126,8 @@ const ChartCard = () => {
         }
       );
       setChartData(formattedData);
+    } else {
+      setChartData(initialChartData);
     }
   }, [statsData]);
 
@@ -124,21 +151,23 @@ const ChartCard = () => {
     expense
   );
 
-  // Example start date (for now we are hardcoding 'Jan 7, 2024')
-  const startDate = new Date(2024, 0, 7); // (year, month, day) - month is zero-indexed
-
-  // Current date
-  const currentDate = new Date();
+  const startDate = new Date(2024, 8, 7); // (year, month, day) - month is zero-indexed
 
   // Get the difference in months
-  const monthDifference = getMonthDifference(startDate, currentDate);
+  const monthDifference = getMonthDifference(startDate, new Date());
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Transactions Overview</CardTitle>
-        <CardDescription>
-          Jan 7, 2024 -{" "}
+        <CardDescription className="flex items-center">
+          <CalendarDaysIcon className="w-4 h-4 mr-1"></CalendarDaysIcon>
+          {startDate.toLocaleDateString("default", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+          <MinusIcon className="w-4 h-4 mx-1"></MinusIcon>
           {new Date().toLocaleDateString("default", {
             month: "short",
             day: "numeric",
@@ -181,9 +210,9 @@ const ChartCard = () => {
                           <tspan
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold"
+                            className="fill-foreground text-xl font-bold"
                           >
-                            {totalTransactions.toLocaleString()}
+                            ${totalTransactions.toLocaleString()}
                           </tspan>
                           <tspan
                             x={viewBox.cx}
@@ -218,7 +247,9 @@ const ChartCard = () => {
         </div>
         <div className="leading-none text-muted-foreground">
           <div className="leading-none text-muted-foreground">
-            Showing total transactions for the last {monthDifference} months
+            {monthDifference
+              ? ` Showing total transactions for the last ${monthDifference} months`
+              : "Showing total transactions for current month"}
           </div>
         </div>
       </CardFooter>
