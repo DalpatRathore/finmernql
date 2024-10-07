@@ -4,7 +4,7 @@ import Transaction, { TransactionsDocument } from "../models/transaction.model";
 interface CreateTransactionInput {
     description: string;
     paymentType: string;
-    category: string;
+    category: "saving" | "expense" | "investment"; 
     amount: number;
     date: string;
     location?: string; // optional
@@ -69,7 +69,29 @@ const transactionsResolver={
               throw new Error(error.message || "Internal server error");
             }
           },
-        //   TODO:
+        categoryStatistics: async(_:unknown, __:unknown, context:IGraphQLContext) =>{
+
+          const user = await context.getUser();
+          if (!user) throw new Error("Unauthorized");
+          const userId = user._id; 
+          const transactions = await Transaction.find({ userId}).lean();
+          const totalByCategory: { [key: string]: number } = {};
+          
+          transactions.forEach((transaction) => {
+            if (!totalByCategory[transaction.category]) {
+                totalByCategory[transaction.category] = 0; // Initialize if not present
+            }
+            totalByCategory[transaction.category] += transaction.amount; // Add amount to category total
+        });
+
+        const result = Object.entries(totalByCategory).map(([category, total]) => ({
+            category,
+            totalAmount: total,
+        }));
+
+        return result;
+          
+        }
         },
    Mutation: {
     createTransaction: async (
