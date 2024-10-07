@@ -84,7 +84,10 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
     variables: { id: transactionId },
     skip: formType === "create",
   });
-
+  // '2024-10-07T12:39:16.000Z'
+  console.log(data?.transaction?.date);
+  console.log(new Date(data?.transaction?.date * 1000));
+  console.log(new Date(Number(data?.transaction?.date)));
   const form = useForm<z.infer<typeof transactionSchema>>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
@@ -93,11 +96,10 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
       amount: data?.transaction?.amount || 0,
       description: data?.transaction?.description || "",
       location: data?.transaction?.location || "",
-      date: new Date(),
-      // date:
-      //   data?.transaction?.date && !isNaN(data.transaction.date)
-      //     ? new Date(data.transaction.date)
-      //     : new Date(),
+      date:
+        data?.transaction?.date && !isNaN(data.transaction.date)
+          ? new Date(Number(data?.transaction?.date)) // Correctly convert from seconds to milliseconds
+          : new Date(), // Fallback to current date if the transaction date is invalid or missing
     },
   });
 
@@ -116,6 +118,7 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
   );
 
   const onSubmit = async (values: z.infer<typeof transactionSchema>) => {
+    console.log(values.date);
     try {
       if (formType === "Create") {
         await createTransaction({
@@ -149,10 +152,10 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
         category: data.transaction.category || "saving",
         amount: data.transaction.amount || 0,
         location: data.transaction.location || "",
-        date: new Date(),
-        // date: data.transaction.date
-        //   ? new Date(data.transaction.date.seconds * 1000)
-        //   : new Date(),
+        date:
+          data?.transaction?.date && !isNaN(data.transaction.date)
+            ? new Date(Number(data?.transaction?.date)) // Correctly convert from seconds to milliseconds
+            : new Date(), // Fallback to current date if the transaction date is invalid or missing
       });
     }
   }, [data, form]);
