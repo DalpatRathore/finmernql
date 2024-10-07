@@ -42,6 +42,41 @@ const chartConfig: Record<Category, { label: string; color: string }> = {
   },
 };
 
+// Corrected helper function to calculate percentage and trend direction
+const calculateTrend = (
+  investment: number,
+  saving: number,
+  expense: number
+) => {
+  const totalIncome = investment + saving + expense;
+  const comparison = investment + saving;
+
+  if (expense > comparison) {
+    const downwardPercentage = ((expense - comparison) / totalIncome) * 100;
+    return {
+      percentage: downwardPercentage.toFixed(2),
+      trendingUp: false, // Downward trend
+    };
+  } else {
+    const upwardPercentage = ((comparison - expense) / totalIncome) * 100;
+    return {
+      percentage: upwardPercentage.toFixed(2),
+      trendingUp: true, // Upward trend
+    };
+  }
+};
+
+// Helper function to calculate the difference in months
+const getMonthDifference = (startDate: Date, currentDate: Date) => {
+  const startYear = startDate.getFullYear();
+  const startMonth = startDate.getMonth();
+
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+
+  return (currentYear - startYear) * 12 + (currentMonth - startMonth);
+};
+
 const ChartCard = () => {
   const [chartData, setChartData] = useState<
     { category: Category; totalAmount: number; fill: string }[]
@@ -73,6 +108,30 @@ const ChartCard = () => {
   const totalTransactions = useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.totalAmount, 0);
   }, [chartData]);
+
+  // Get total saving, investment, and expense
+  const saving =
+    chartData.find(item => item.category === "saving")?.totalAmount || 0;
+  const investment =
+    chartData.find(item => item.category === "investment")?.totalAmount || 0;
+  const expense =
+    chartData.find(item => item.category === "expense")?.totalAmount || 0;
+
+  // Calculate the trend
+  const { percentage, trendingUp } = calculateTrend(
+    investment,
+    saving,
+    expense
+  );
+
+  // Example start date (for now we are hardcoding 'Jan 7, 2024')
+  const startDate = new Date(2024, 0, 7); // (year, month, day) - month is zero-indexed
+
+  // Current date
+  const currentDate = new Date();
+
+  // Get the difference in months
+  const monthDifference = getMonthDifference(startDate, currentDate);
 
   return (
     <Card className="flex flex-col">
@@ -145,14 +204,22 @@ const ChartCard = () => {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2%
-          <>
-            <TrendingUpIcon className="h-4 w-4 text-green-600" />
-            <TrendingDownIcon className="h-4 w-4 text-rose-600" />
-          </>
+          {trendingUp ? (
+            <>
+              Trending up by {percentage}%
+              <TrendingUpIcon className="h-4 w-4 text-green-600" />
+            </>
+          ) : (
+            <>
+              Trending down by {percentage}%
+              <TrendingDownIcon className="h-4 w-4 text-rose-600" />
+            </>
+          )}
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total transactions for the last 6 months
+          <div className="leading-none text-muted-foreground">
+            Showing total transactions for the last {monthDifference} months
+          </div>
         </div>
       </CardFooter>
     </Card>
