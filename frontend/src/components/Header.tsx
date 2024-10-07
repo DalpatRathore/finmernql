@@ -13,13 +13,14 @@ const Header = () => {
 
   const location = useLocation();
 
-  const [logout, { loading }] = useMutation(LOGOUT, {
+  const [logout, { loading, client }] = useMutation(LOGOUT, {
     refetchQueries: ["GetAuthenticatedUser"],
   });
 
   const handleLogout = async () => {
     try {
       await logout();
+      client.resetStore();
       toast.success("Logout successfully");
     } catch (error) {
       console.log(error);

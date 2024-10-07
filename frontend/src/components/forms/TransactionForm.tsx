@@ -84,10 +84,7 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
     variables: { id: transactionId },
     skip: formType === "create",
   });
-  // '2024-10-07T12:39:16.000Z'
-  console.log(data?.transaction?.date);
-  console.log(new Date(data?.transaction?.date * 1000));
-  console.log(new Date(Number(data?.transaction?.date)));
+
   const form = useForm<z.infer<typeof transactionSchema>>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
@@ -99,7 +96,7 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
       date:
         data?.transaction?.date && !isNaN(data.transaction.date)
           ? new Date(Number(data?.transaction?.date)) // Correctly convert from seconds to milliseconds
-          : new Date(), // Fallback to current date if the transaction date is invalid or missing
+          : new Date(), // Fallback to current date
     },
   });
 
@@ -154,8 +151,8 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
         location: data.transaction.location || "",
         date:
           data?.transaction?.date && !isNaN(data.transaction.date)
-            ? new Date(Number(data?.transaction?.date)) // Correctly convert from seconds to milliseconds
-            : new Date(), // Fallback to current date if the transaction date is invalid or missing
+            ? new Date(Number(data?.transaction?.date))
+            : new Date(),
       });
     }
   }, [data, form]);
