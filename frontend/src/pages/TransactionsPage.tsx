@@ -1,5 +1,5 @@
 import DashboardButton from "@/components/DashboardButton";
-import Loader from "@/components/Loader";
+import SpinnerSvg from "@/components/SpinnerSvg";
 import TransactionHistory from "@/components/TransactionHistory";
 import { GET_AUTHENTICATED_USER } from "@/graphql/queries/user.query";
 import { useQuery } from "@apollo/client";
@@ -9,7 +9,11 @@ const TransactionsPage = () => {
   const { data, loading } = useQuery(GET_AUTHENTICATED_USER);
 
   if (loading) {
-    return <Loader />;
+    return (
+      <div className="flex items-center justify-center h-full w-full px-5">
+        <SpinnerSvg></SpinnerSvg>
+      </div>
+    );
   }
 
   if (!data.authUser) {

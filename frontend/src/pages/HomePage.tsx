@@ -4,15 +4,19 @@ import TransactionHistory from "@/components/TransactionHistory";
 import { GET_AUTHENTICATED_USER } from "@/graphql/queries/user.query";
 import { useQuery } from "@apollo/client";
 import HeroSection from "../components/HeroSection";
-import Loader from "@/components/Loader";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import TransactionForm from "@/components/forms/TransactionForm";
+import SpinnerSvg from "@/components/SpinnerSvg";
 
 const HomePage = () => {
   const { loading, error, data } = useQuery(GET_AUTHENTICATED_USER);
 
   if (loading) {
-    return <Loader></Loader>;
+    return (
+      <div className="flex items-center justify-center h-full w-full px-5">
+        <SpinnerSvg></SpinnerSvg>
+      </div>
+    );
   }
 
   if (error) {

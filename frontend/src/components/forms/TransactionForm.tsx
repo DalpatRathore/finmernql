@@ -12,7 +12,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -38,10 +37,17 @@ import {
 } from "@/graphql/mutations/transaction.mutation";
 import toast from "react-hot-toast";
 import { GET_TRANSACTION } from "@/graphql/queries/transaction.query";
-import Loader from "../Loader";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardButton from "../DashboardButton";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const transactionSchema = z.object({
   description: z
@@ -157,18 +163,46 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
   }, [data, form]);
 
   if (fetchLoading && formType === "Update") {
-    return <Loader></Loader>;
+    return (
+      <div className="flex items-center justify-center h-full w-full px-5">
+        <Card className="w-full max-w-lg h-full grid grid-rows-[auto_1fr_auto] px-5">
+          <CardHeader className="flex items-start mb-5">
+            <Skeleton className="h-10 w-40 rounded-lg" />
+          </CardHeader>
+          <CardContent className="space-y-8">
+            <Skeleton className="h-10 w-full rounded-lg" />
+            <Skeleton className="h-10 w-full rounded-lg" />
+            <div className="w-full flex items-center justify-center gap-3">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="w-full flex items-center justify-center gap-3">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <Skeleton className="h-10 w-full rounded-lg" />
+          </CardContent>
+          <CardFooter>
+            <Button disabled className="w-full bg-muted">
+              Update Transaction
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    );
   }
 
   if (formType === "Update" && !data?.transaction) {
     return (
       <div className="w-full max-w-lg mx-auto">
-        <Card className="text-center h-32 flex items-center justify-center">
-          <CardContent className="p-0">
+        <Card className="text-center h-96 flex flex-col items-center justify-center">
+          <CardContent>
             <p className="text-lg font-semibold">No record found!</p>
           </CardContent>
+          <CardFooter>
+            <DashboardButton></DashboardButton>
+          </CardFooter>
         </Card>
-        <DashboardButton></DashboardButton>
       </div>
     );
   }

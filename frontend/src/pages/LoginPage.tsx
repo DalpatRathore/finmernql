@@ -1,4 +1,5 @@
 import { LoginForm } from "@/components/forms/LoginForm";
+import SpinnerSvg from "@/components/SpinnerSvg";
 import { GET_AUTHENTICATED_USER } from "@/graphql/queries/user.query";
 import { useQuery } from "@apollo/client";
 import { Navigate } from "react-router-dom";
@@ -6,7 +7,11 @@ import { Navigate } from "react-router-dom";
 const LoginPage = () => {
   const { loading, data } = useQuery(GET_AUTHENTICATED_USER);
 
-  if (loading) return null;
+  if (loading) {
+    <div className="flex items-center justify-center h-full w-full px-5">
+      <SpinnerSvg></SpinnerSvg>
+    </div>;
+  }
 
   if (data?.authUser) {
     return <Navigate to="/" />;

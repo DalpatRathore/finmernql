@@ -22,9 +22,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import Loader from "./Loader";
 import { useQuery } from "@apollo/client";
 import { GET_TRANSACTIONS_STATISTICS } from "@/graphql/queries/transaction.query";
+import SpinnerSvg from "./SpinnerSvg";
 
 export const description = "A donut chart with text";
 
@@ -111,7 +111,6 @@ const ChartCard = () => {
       statsData?.categoryStatistics &&
       statsData.categoryStatistics.length > 0
     ) {
-      console.log("hell");
       const formattedData = statsData.categoryStatistics.map(
         (stat: { category: string; totalAmount: number }) => {
           // Type check to ensure the category is valid
@@ -178,7 +177,9 @@ const ChartCard = () => {
       <CardContent className="flex-1 pb-0">
         {statsLoading ? (
           <div className="mx-auto aspect-square max-h-[250px]">
-            <Loader />
+            <div className="flex items-center justify-center h-full w-full px-5">
+              <SpinnerSvg></SpinnerSvg>
+            </div>
           </div>
         ) : (
           <ChartContainer
