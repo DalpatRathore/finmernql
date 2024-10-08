@@ -25,6 +25,7 @@ import {
 import { useQuery } from "@apollo/client";
 import { GET_TRANSACTIONS_STATISTICS } from "@/graphql/queries/transaction.query";
 import SpinnerSvg from "./SpinnerSvg";
+import { cn } from "@/lib/utils";
 
 export const description = "A donut chart with text";
 
@@ -35,15 +36,15 @@ type Category = "saving" | "investment" | "expense";
 const chartConfig: Record<Category, { label: string; color: string }> = {
   saving: {
     label: "Saving",
-    color: "green",
+    color: "#086e2f",
   },
   investment: {
     label: "Investment",
-    color: "blue",
+    color: "#0b86cd",
   },
   expense: {
     label: "Expense",
-    color: "red",
+    color: "#a90808",
   },
 };
 
@@ -129,7 +130,6 @@ const ChartCard = () => {
       setChartData(initialChartData);
     }
   }, [statsData]);
-
   // Calculate total transactions
   const totalTransactions = useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.totalAmount, 0);
@@ -156,9 +156,25 @@ const ChartCard = () => {
   const monthDifference = getMonthDifference(startDate, new Date());
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col relative">
+      <span className="absolute flex h-3 w-3 -top-1 -right-1">
+        <span
+          className={cn(
+            "animate-ping absolute inline-flex h-full w-full rounded-full  opacity-75",
+
+            trendingUp ? "bg-green-500" : "bg-rose-500"
+          )}
+        ></span>
+        <span
+          className={cn(
+            "absolute inline-flex rounded-full h-3 w-3",
+
+            trendingUp ? "bg-green-600" : "bg-rose-600"
+          )}
+        ></span>
+      </span>
       <CardHeader className="items-center pb-0">
-        <CardTitle>Transactions Overview</CardTitle>
+        <CardTitle className="text-lg">Transactions Overview</CardTitle>
         <CardDescription className="flex items-center">
           <CalendarDaysIcon className="w-4 h-4 mr-1"></CalendarDaysIcon>
           {startDate.toLocaleDateString("default", {
@@ -211,7 +227,12 @@ const ChartCard = () => {
                           <tspan
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-xl font-bold"
+                            className={cn(
+                              "fill-foreground text-3xl font-bold",
+
+                              totalTransactions > 10000 && "text-2xl",
+                              totalTransactions > 100000 && "text-xl"
+                            )}
                           >
                             ${totalTransactions.toLocaleString()}
                           </tspan>

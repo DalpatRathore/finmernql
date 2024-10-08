@@ -26,7 +26,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2Icon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
@@ -66,6 +66,7 @@ const transactionSchema = z.object({
   amount: z
     .number()
     .min(1, { message: "Amount should be positive." })
+    .max(1000000, { message: "Max amount upto 1,000,000." }) // Set a maximum limit
     .refine(Number.isFinite, { message: "Amount must be a valid number." }),
 
   location: z
@@ -371,11 +372,16 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
               className="w-full"
               disabled={createLoading || updateLoading}
             >
-              {createLoading || updateLoading
-                ? "Submitting..."
-                : formType === "Create"
-                ? "Create Transaction"
-                : "Update Transaction"}
+              {createLoading || updateLoading ? (
+                <>
+                  Submitting...
+                  <Loader2Icon className="w-4 h-4 animate-spin ml-2"></Loader2Icon>
+                </>
+              ) : formType === "Create" ? (
+                "Create Transaction"
+              ) : (
+                "Update Transaction"
+              )}
             </Button>
           </form>
         </Form>

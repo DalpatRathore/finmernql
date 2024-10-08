@@ -7,6 +7,12 @@ import ThemeToggle from "./ThemeToggle";
 import toast from "react-hot-toast";
 import { LOGOUT } from "@/graphql/mutations/user.mutation";
 import UserAccount from "./UserAccount";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 const Header = () => {
   const { data } = useQuery(GET_AUTHENTICATED_USER);
@@ -40,20 +46,31 @@ const Header = () => {
           <div className="flex items-center gap-4">
             {data?.authUser ? (
               <>
-                <UserAccount authUser={data.authUser}></UserAccount>
-                <Button
-                  variant={"outline"}
-                  onClick={handleLogout}
-                  title="logout"
-                  size={"icon"}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <Loader2 className="w-4 h-4 animate-spin"></Loader2>
-                  ) : (
-                    <LogOut className="w-4 h-4"></LogOut>
-                  )}
-                </Button>
+                <UserAccount
+                  authUser={data.authUser}
+                  handleLogout={handleLogout}
+                ></UserAccount>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        onClick={handleLogout}
+                        size={"icon"}
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <Loader2 className="w-4 h-4 animate-spin"></Loader2>
+                        ) : (
+                          <LogOut className="w-4 h-4"></LogOut>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Logout</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </>
             ) : location.pathname === "/login" ? (
               <Link to={"/signup"}>

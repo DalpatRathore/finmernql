@@ -239,7 +239,7 @@ const TransactionHistory = () => {
                                     </Button>
                                   </DropdownMenuTrigger>
                                   <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>
+                                    <DropdownMenuLabel className="text-muted-foreground">
                                       Actions
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator></DropdownMenuSeparator>
@@ -247,16 +247,17 @@ const TransactionHistory = () => {
                                       onClick={() =>
                                         handleEdit(transaction._id)
                                       }
-                                      className="flex items-center justify-between"
+                                      className="flex items-center justify-between cursor-pointer"
                                     >
                                       Edit <Edit className="w-4 h-4"></Edit>
                                     </DropdownMenuItem>
+                                    <DropdownMenuSeparator></DropdownMenuSeparator>
                                     <DropdownMenuItem
                                       onClick={() =>
                                         handleDelete(transaction._id)
                                       }
                                       disabled={deleteLoading}
-                                      className="flex items-center justify-between"
+                                      className="flex items-center justify-between cursor-pointer"
                                     >
                                       Delete
                                       <Trash2 className="w-4 h-4"></Trash2>

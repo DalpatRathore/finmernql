@@ -63,17 +63,9 @@ const formSchema = z
       ctx.addIssue({
         code: "custom",
         message: "Passwords do not match.",
-        path: ["confirmPassword"], // Specify the path for the error
+        path: ["confirmPassword"],
       });
     }
-
-    // profilePic: z
-    //   .string()
-    //   .url({ message: "Profile picture must be a valid URL." })
-    //   .regex(/^https?:\/\/.+\.(jpg|jpeg|png)$/, {
-    //     message: "Profile picture must be a valid image URL (jpg, jpeg, png).",
-    //   })
-    //   .optional(), // Optional since it has a default value
   });
 
 const SignupForm = () => {
@@ -213,7 +205,7 @@ const SignupForm = () => {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
                 <>
-                  Registering{" "}
+                  Registering
                   <LoaderCircle className="w-4 h-4 ml-2 animate-spin"></LoaderCircle>
                 </>
               ) : (
@@ -223,7 +215,7 @@ const SignupForm = () => {
           </form>
         </Form>
         <div className="mt-4 text-center text-sm">
-          Already have an account?{" "}
+          Already have an account?
           <Link to={"/login"} className="underline">
             Login
           </Link>
