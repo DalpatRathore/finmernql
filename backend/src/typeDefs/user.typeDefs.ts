@@ -7,6 +7,7 @@ type User{
     password: String!
     profilePicture:String
     gender:String!
+    createdAt:String!
 }
 
 type Query {
