@@ -10,6 +10,7 @@ import SpinnerSvg from "@/components/SpinnerSvg";
 
 const HomePage = () => {
   const { loading, error, data } = useQuery(GET_AUTHENTICATED_USER);
+  console.log(data);
 
   if (loading) {
     return (
@@ -30,7 +31,7 @@ const HomePage = () => {
           <div className="flex flex-col lg:flex-row items-start justify-between gap-3 lg:gap-5">
             <div className="w-full space-y-5">
               <TextCard></TextCard>
-              <ChartCard></ChartCard>
+              <ChartCard createdAt={data.authUser.createdAt}></ChartCard>
             </div>
             <div className="w-full h-full">
               <TransactionForm formType="Create"></TransactionForm>

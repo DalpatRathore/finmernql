@@ -98,7 +98,7 @@ const initialChartData: {
   { category: "expense", totalAmount: 1, fill: chartConfig.expense.color },
 ];
 
-const ChartCard = () => {
+const ChartCard = ({ createdAt }: { createdAt: string }) => {
   const [chartData, setChartData] =
     useState<{ category: Category; totalAmount: number; fill: string }[]>(
       initialChartData
@@ -150,7 +150,8 @@ const ChartCard = () => {
     expense
   );
 
-  const startDate = new Date(2024, 8, 7); // (year, month, day) - month is zero-indexed
+  const startDate = new Date(Number(createdAt));
+  console.log(startDate);
 
   // Get the difference in months
   const monthDifference = getMonthDifference(startDate, new Date());
