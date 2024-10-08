@@ -16,10 +16,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Separator } from "../ui/separator";
-import { useMutation } from "@apollo/client";
+import { ApolloError, useMutation } from "@apollo/client";
 import { SIGN_UP } from "@/graphql/mutations/user.mutation";
 import toast from "react-hot-toast";
-import { LoaderCircle } from "lucide-react";
+import { EyeIcon, EyeOffIcon, LoaderCircle } from "lucide-react";
+import { useState } from "react";
 
 const formSchema = z
   .object({
@@ -70,6 +71,18 @@ const formSchema = z
 
 const SignupForm = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(prev => !prev);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(prev => !prev);
+  };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -96,9 +109,16 @@ const SignupForm = () => {
       form.reset();
       navigate("/");
       toast.success("Registration successful!");
-    } catch (error) {
-      toast.error("Something went wrong!");
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof ApolloError && error.graphQLErrors.length > 0) {
+        // Extract the first error message
+        const errorMessage =
+          error.graphQLErrors[0]?.message || "Something went wrong!";
+        toast.error(errorMessage);
+      } else {
+        // Fallback error message for non-ApolloError cases
+        toast.error("Something went wrong!");
+      }
     }
   };
   return (
@@ -139,6 +159,7 @@ const SignupForm = () => {
               )}
             />
 
+            {/* Password Field */}
             <FormField
               control={form.control}
               name="password"
@@ -146,12 +167,30 @@ const SignupForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="password" {...field} />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="password"
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? (
+                          <EyeOffIcon className="h-5 w-5 text-gray-500" />
+                        ) : (
+                          <EyeIcon className="h-5 w-5 text-gray-500" />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* Confirm Password Field */}
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -159,13 +198,24 @@ const SignupForm = () => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="confirm Password"
-                      {...field}
-                      onPaste={e => e.preventDefault()}
-                      onCopy={e => e.preventDefault()}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="confirm password"
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                        onClick={toggleConfirmPasswordVisibility}
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOffIcon className="h-5 w-5 text-gray-500" />
+                        ) : (
+                          <EyeIcon className="h-5 w-5 text-gray-500" />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -216,7 +266,7 @@ const SignupForm = () => {
         </Form>
         <div className="mt-4 text-center text-sm">
           Already have an account?
-          <Link to={"/login"} className="underline">
+          <Link to={"/login"} className="underline ml-2">
             Login
           </Link>
         </div>

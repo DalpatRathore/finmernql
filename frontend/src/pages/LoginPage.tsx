@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/client";
 import { Navigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const { loading, data } = useQuery(GET_AUTHENTICATED_USER);
+  const { data, loading } = useQuery(GET_AUTHENTICATED_USER);
 
   if (loading) {
     <div className="flex items-center justify-center h-full w-full px-5">

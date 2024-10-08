@@ -17,7 +17,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { LOGIN } from "@/graphql/mutations/user.mutation";
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
-import { Loader2 } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
+import { useState } from "react";
 
 const formSchema = z.object({
   username: z
@@ -33,6 +34,12 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(prev => !prev);
+  };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,6 +63,7 @@ export function LoginForm() {
       navigate("/");
     } catch (error) {
       console.error(error);
+      toast.success("Invalid username or password.");
     }
   };
   return (
@@ -89,6 +97,7 @@ export function LoginForm() {
                 </FormItem>
               )}
             />
+            {/* Password Field */}
             <FormField
               control={form.control}
               name="password"
@@ -96,7 +105,24 @@ export function LoginForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="password"
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? (
+                          <EyeOffIcon className="h-5 w-5 text-gray-500" />
+                        ) : (
+                          <EyeIcon className="h-5 w-5 text-gray-500" />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,8 +141,8 @@ export function LoginForm() {
           </form>
         </Form>
         <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <Link to={"/signup"} className="underline">
+          Don&apos;t have an account?
+          <Link to={"/signup"} className="underline ml-2">
             Sign up
           </Link>
         </div>
