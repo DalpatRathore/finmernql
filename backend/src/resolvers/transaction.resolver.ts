@@ -50,7 +50,11 @@ const transactionsResolver={
                 const user = await context.getUser();
                 if (!user) throw new Error("Unauthorized");
                 const userId = user._id; 
-                const transactions = await Transaction.find({userId});
+                // Fetch transactions sorted by 'updatedAt' in descending order (latest first)
+                const transactions = await Transaction.find({ userId })
+                .lean()
+                .sort({ updatedAt: -1 }); // Sort by updatedAt in descending order
+
                 return transactions;
                 
             } catch (error: any) {

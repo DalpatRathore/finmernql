@@ -45,18 +45,18 @@ const userResolver = {
 
         const existingUser = await User.findOne({ username });
         if (existingUser) {
-          throw new Error("User already exists");
+          throw new Error("Username already exists");
         }
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         let profilePicture = "";
         if (gender === "male") {
-          profilePicture = "https://avatar.iran.liara.run/public/boy?username=${username}";
+          profilePicture = `https://avatar.iran.liara.run/public/boy?username=${username}`;
         } else if (gender === "female") {
-          profilePicture = "https://avatar.iran.liara.run/public/girl?username=${username}";
+          profilePicture = `https://avatar.iran.liara.run/public/girl?username=${username}`;
         }
-
+        console.log(profilePicture);
         const newUser = new User({
           username,
           name,
@@ -67,7 +67,6 @@ const userResolver = {
         await newUser.save();
 
         await context.login(newUser);
-
         return newUser;
       } catch (error: any) {
         console.log("Error in signup", error);
