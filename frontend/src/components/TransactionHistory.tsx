@@ -36,6 +36,14 @@ import { GET_TRANSACTIONS } from "@/graphql/queries/transaction.query";
 import { Skeleton } from "./ui/skeleton";
 import { DELETE_TRANSACTION } from "@/graphql/mutations/transaction.mutation";
 import toast from "react-hot-toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
+import { FaMoneyCheckDollar, FaSackDollar } from "react-icons/fa6";
+import { RiExchangeDollarLine } from "react-icons/ri";
 
 interface ITransaction {
   _id: string;
@@ -100,7 +108,7 @@ const TransactionHistory = () => {
   return (
     <div className="flex w-full max-w-7xl mx-auto flex-col border rounded-xl shadow">
       <div className="flex flex-col sm:gap-4 sm:p-4">
-        <main className="grid flex-1 items-start gap-4 p-4 md:gap-8">
+        <main className="grid flex-1 items-start gap-4 p-1 sm:p-4 md:gap-8">
           <Tabs defaultValue="all">
             <div className="flex items-center">
               <TabsList>
@@ -134,11 +142,11 @@ const TransactionHistory = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="hidden w-[100px] sm:table-cell">
+                        <TableHead className="hidden w-[70px] lg:table-cell">
                           <span className="sr-only">Image</span>
                         </TableHead>
                         <TableHead>Description</TableHead>
-                        <TableHead className="hidden md:table-cell">
+                        <TableHead className="hidden sm:table-cell">
                           Payment Type
                         </TableHead>
                         <TableHead>Category</TableHead>
@@ -176,20 +184,45 @@ const TransactionHistory = () => {
                               : "N/A";
                           return (
                             <TableRow key={_id}>
-                              <TableCell className="hidden sm:table-cell">
+                              <TableCell className="hidden lg:table-cell">
                                 <img
                                   alt="Transaction image"
                                   className="aspect-square rounded-full object-cover"
-                                  height="64"
-                                  width="64"
+                                  height="50"
+                                  width="50"
                                   src="/placeholder.png"
                                 />
                               </TableCell>
                               <TableCell className="font-medium">
-                                {description}
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <p className="truncate w-20 lg:w-44">
+                                        {description}
+                                      </p>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>{description}</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
                               </TableCell>
                               <TableCell className="hidden sm:table-cell capitalize">
-                                {paymentType}
+                                {paymentType === "card" ? (
+                                  <p className="flex items-center justify-start gap-2">
+                                    <FaMoneyCheckDollar className="w-4 h-4 ml-5 md:ml-0"></FaMoneyCheckDollar>
+                                    <span className="hidden md:block">
+                                      {paymentType}
+                                    </span>
+                                  </p>
+                                ) : (
+                                  <p className="flex items-center justify-start gap-2">
+                                    <FaSackDollar className="w-4 h-4 ml-5 md:ml-0"></FaSackDollar>
+                                    <span className="hidden md:block">
+                                      {paymentType}
+                                    </span>
+                                  </p>
+                                )}
                               </TableCell>
                               <TableCell>
                                 {category === "expense" && (
@@ -197,7 +230,10 @@ const TransactionHistory = () => {
                                     variant="destructive"
                                     className="capitalize"
                                   >
-                                    {category}
+                                    <RiExchangeDollarLine className="w-4 h-4 lg:mr-1"></RiExchangeDollarLine>
+                                    <span className="hidden lg:block">
+                                      {category}
+                                    </span>
                                   </Badge>
                                 )}
                                 {category === "investment" && (
@@ -205,7 +241,10 @@ const TransactionHistory = () => {
                                     variant="investment"
                                     className="capitalize text-white"
                                   >
-                                    {category}
+                                    <RiExchangeDollarLine className="w-4 h-4 lg:mr-1"></RiExchangeDollarLine>
+                                    <span className="hidden lg:block">
+                                      {category}
+                                    </span>
                                   </Badge>
                                 )}
                                 {category === "saving" && (
@@ -213,16 +252,32 @@ const TransactionHistory = () => {
                                     variant="saving"
                                     className="capitalize text-white"
                                   >
-                                    {category}
+                                    <RiExchangeDollarLine className="w-4 h-4 lg:mr-1"></RiExchangeDollarLine>
+                                    <span className="hidden lg:block">
+                                      {category}
+                                    </span>
                                   </Badge>
                                 )}
                               </TableCell>
-                              <TableCell>${amount}</TableCell>
+                              <TableCell>
+                                <strong>${amount.toLocaleString()}</strong>
+                              </TableCell>
                               <TableCell className="hidden md:table-cell">
                                 {formattedDate}
                               </TableCell>
                               <TableCell className="hidden md:table-cell">
-                                {location}
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <p className="truncate w-20 lg:w-32">
+                                        {location}
+                                      </p>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>{location}</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
                               </TableCell>
                               <TableCell>
                                 <DropdownMenu>
@@ -303,11 +358,11 @@ const TransactionHistory = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="hidden w-[100px] sm:table-cell">
+                        <TableHead className="hidden w-[70px] lg:table-cell">
                           <span className="sr-only">Image</span>
                         </TableHead>
                         <TableHead>Description</TableHead>
-                        <TableHead className="hidden md:table-cell">
+                        <TableHead className="hidden sm:table-cell">
                           Payment Type
                         </TableHead>
                         <TableHead>Category</TableHead>
@@ -351,35 +406,78 @@ const TransactionHistory = () => {
                                 : "N/A";
                             return (
                               <TableRow key={_id}>
-                                <TableCell className="hidden sm:table-cell">
+                                <TableCell className="hidden lg:table-cell">
                                   <img
                                     alt="Transaction image"
                                     className="aspect-square rounded-full object-cover"
-                                    height="64"
-                                    width="64"
+                                    height="50"
+                                    width="50"
                                     src="/placeholder.png"
                                   />
                                 </TableCell>
                                 <TableCell className="font-medium">
-                                  {description}
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <p className="truncate w-20 lg:w-44">
+                                          {description}
+                                        </p>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>{description}</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
                                 </TableCell>
                                 <TableCell className="hidden sm:table-cell capitalize">
-                                  {paymentType}
+                                  {paymentType === "card" ? (
+                                    <p className="flex items-center justify-start gap-2">
+                                      <FaMoneyCheckDollar className="w-4 h-4 ml-5 md:ml-0"></FaMoneyCheckDollar>
+                                      <span className="hidden md:block">
+                                        {paymentType}
+                                      </span>
+                                    </p>
+                                  ) : (
+                                    <p className="flex items-center justify-start gap-2">
+                                      <FaSackDollar className="w-4 h-4 ml-5 md:ml-0"></FaSackDollar>
+                                      <span className="hidden md:block">
+                                        {paymentType}
+                                      </span>
+                                    </p>
+                                  )}
                                 </TableCell>
                                 <TableCell>
-                                  <Badge
-                                    variant="saving"
-                                    className="capitalize text-white"
-                                  >
-                                    {category}
-                                  </Badge>
+                                  {category === "saving" && (
+                                    <Badge
+                                      variant="saving"
+                                      className="capitalize text-white"
+                                    >
+                                      <RiExchangeDollarLine className="w-4 h-4 lg:mr-1"></RiExchangeDollarLine>
+                                      <span className="hidden lg:block">
+                                        {category}
+                                      </span>
+                                    </Badge>
+                                  )}
                                 </TableCell>
-                                <TableCell>${amount}</TableCell>
+                                <TableCell>
+                                  <strong>${amount.toLocaleString()}</strong>
+                                </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                   {formattedDate}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                  {location}
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <p className="truncate w-20 lg:w-44">
+                                          {location}
+                                        </p>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>{location}</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
                                 </TableCell>
                                 <TableCell>
                                   <DropdownMenu>
@@ -395,9 +493,8 @@ const TransactionHistory = () => {
                                         </span>
                                       </Button>
                                     </DropdownMenuTrigger>
-
                                     <DropdownMenuContent align="end">
-                                      <DropdownMenuLabel>
+                                      <DropdownMenuLabel className="text-muted-foreground">
                                         Actions
                                       </DropdownMenuLabel>
                                       <DropdownMenuSeparator></DropdownMenuSeparator>
@@ -405,16 +502,17 @@ const TransactionHistory = () => {
                                         onClick={() =>
                                           handleEdit(transaction._id)
                                         }
-                                        className="flex items-center justify-between"
+                                        className="flex items-center justify-between cursor-pointer"
                                       >
                                         Edit <Edit className="w-4 h-4"></Edit>
                                       </DropdownMenuItem>
+                                      <DropdownMenuSeparator></DropdownMenuSeparator>
                                       <DropdownMenuItem
                                         onClick={() =>
                                           handleDelete(transaction._id)
                                         }
                                         disabled={deleteLoading}
-                                        className="flex items-center justify-between"
+                                        className="flex items-center justify-between cursor-pointer"
                                       >
                                         Delete
                                         <Trash2 className="w-4 h-4"></Trash2>
@@ -459,11 +557,11 @@ const TransactionHistory = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="hidden w-[100px] sm:table-cell">
+                        <TableHead className="hidden w-[70px] lg:table-cell">
                           <span className="sr-only">Image</span>
                         </TableHead>
                         <TableHead>Description</TableHead>
-                        <TableHead className="hidden md:table-cell">
+                        <TableHead className="hidden sm:table-cell">
                           Payment Type
                         </TableHead>
                         <TableHead>Category</TableHead>
@@ -506,35 +604,78 @@ const TransactionHistory = () => {
                                 : "N/A";
                             return (
                               <TableRow key={_id}>
-                                <TableCell className="hidden sm:table-cell">
+                                <TableCell className="hidden lg:table-cell">
                                   <img
                                     alt="Transaction image"
                                     className="aspect-square rounded-full object-cover"
-                                    height="64"
-                                    width="64"
+                                    height="50"
+                                    width="50"
                                     src="/placeholder.png"
                                   />
                                 </TableCell>
                                 <TableCell className="font-medium">
-                                  {description}
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <p className="truncate w-20 lg:w-44">
+                                          {description}
+                                        </p>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>{description}</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
                                 </TableCell>
                                 <TableCell className="hidden sm:table-cell capitalize">
-                                  {paymentType}
+                                  {paymentType === "card" ? (
+                                    <p className="flex items-center justify-start gap-2">
+                                      <FaMoneyCheckDollar className="w-4 h-4 ml-5 md:ml-0"></FaMoneyCheckDollar>
+                                      <span className="hidden md:block">
+                                        {paymentType}
+                                      </span>
+                                    </p>
+                                  ) : (
+                                    <p className="flex items-center justify-start gap-2">
+                                      <FaSackDollar className="w-4 h-4 ml-5 md:ml-0"></FaSackDollar>
+                                      <span className="hidden md:block">
+                                        {paymentType}
+                                      </span>
+                                    </p>
+                                  )}
                                 </TableCell>
                                 <TableCell>
-                                  <Badge
-                                    variant="destructive"
-                                    className="capitalize"
-                                  >
-                                    {category}
-                                  </Badge>
+                                  {category === "expense" && (
+                                    <Badge
+                                      variant="destructive"
+                                      className="capitalize"
+                                    >
+                                      <RiExchangeDollarLine className="w-4 h-4 lg:mr-1"></RiExchangeDollarLine>
+                                      <span className="hidden lg:block">
+                                        {category}
+                                      </span>
+                                    </Badge>
+                                  )}
                                 </TableCell>
-                                <TableCell>${amount}</TableCell>
+                                <TableCell>
+                                  <strong>${amount.toLocaleString()}</strong>
+                                </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                   {formattedDate}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                  {location}
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <p className="truncate w-20 lg:w-32">
+                                          {location}
+                                        </p>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>{location}</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
                                 </TableCell>
                                 <TableCell>
                                   <DropdownMenu>
@@ -551,7 +692,7 @@ const TransactionHistory = () => {
                                       </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                      <DropdownMenuLabel>
+                                      <DropdownMenuLabel className="text-muted-foreground">
                                         Actions
                                       </DropdownMenuLabel>
                                       <DropdownMenuSeparator></DropdownMenuSeparator>
@@ -559,16 +700,17 @@ const TransactionHistory = () => {
                                         onClick={() =>
                                           handleEdit(transaction._id)
                                         }
-                                        className="flex items-center justify-between"
+                                        className="flex items-center justify-between cursor-pointer"
                                       >
                                         Edit <Edit className="w-4 h-4"></Edit>
                                       </DropdownMenuItem>
+                                      <DropdownMenuSeparator></DropdownMenuSeparator>
                                       <DropdownMenuItem
                                         onClick={() =>
                                           handleDelete(transaction._id)
                                         }
                                         disabled={deleteLoading}
-                                        className="flex items-center justify-between"
+                                        className="flex items-center justify-between cursor-pointer"
                                       >
                                         Delete
                                         <Trash2 className="w-4 h-4"></Trash2>
@@ -613,11 +755,11 @@ const TransactionHistory = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="hidden w-[100px] sm:table-cell">
+                        <TableHead className="hidden w-[70px] lg:table-cell">
                           <span className="sr-only">Image</span>
                         </TableHead>
                         <TableHead>Description</TableHead>
-                        <TableHead className="hidden md:table-cell">
+                        <TableHead className="hidden sm:table-cell">
                           Payment Type
                         </TableHead>
                         <TableHead>Category</TableHead>
@@ -661,35 +803,78 @@ const TransactionHistory = () => {
                                 : "N/A";
                             return (
                               <TableRow key={_id}>
-                                <TableCell className="hidden sm:table-cell">
+                                <TableCell className="hidden lg:table-cell">
                                   <img
                                     alt="Transaction image"
                                     className="aspect-square rounded-full object-cover"
-                                    height="64"
-                                    width="64"
+                                    height="50"
+                                    width="50"
                                     src="/placeholder.png"
                                   />
                                 </TableCell>
                                 <TableCell className="font-medium">
-                                  {description}
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <p className="truncate w-20 lg:w-44">
+                                          {description}
+                                        </p>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>{description}</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
                                 </TableCell>
                                 <TableCell className="hidden sm:table-cell capitalize">
-                                  {paymentType}
+                                  {paymentType === "card" ? (
+                                    <p className="flex items-center justify-start gap-2">
+                                      <FaMoneyCheckDollar className="w-4 h-4 ml-5 md:ml-0"></FaMoneyCheckDollar>
+                                      <span className="hidden md:block">
+                                        {paymentType}
+                                      </span>
+                                    </p>
+                                  ) : (
+                                    <p className="flex items-center justify-start gap-2">
+                                      <FaSackDollar className="w-4 h-4 ml-5 md:ml-0"></FaSackDollar>
+                                      <span className="hidden md:block">
+                                        {paymentType}
+                                      </span>
+                                    </p>
+                                  )}
                                 </TableCell>
                                 <TableCell>
-                                  <Badge
-                                    variant="investment"
-                                    className="capitalize text-white"
-                                  >
-                                    {category}
-                                  </Badge>
+                                  {category === "investment" && (
+                                    <Badge
+                                      variant="investment"
+                                      className="capitalize text-white"
+                                    >
+                                      <RiExchangeDollarLine className="w-4 h-4 lg:mr-1"></RiExchangeDollarLine>
+                                      <span className="hidden lg:block">
+                                        {category}
+                                      </span>
+                                    </Badge>
+                                  )}
                                 </TableCell>
-                                <TableCell>${amount}</TableCell>
+                                <TableCell>
+                                  <strong>${amount.toLocaleString()}</strong>
+                                </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                   {formattedDate}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
-                                  {location}
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <p className="truncate w-20 lg:w-32">
+                                          {location}
+                                        </p>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>{location}</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
                                 </TableCell>
                                 <TableCell>
                                   <DropdownMenu>
@@ -706,7 +891,7 @@ const TransactionHistory = () => {
                                       </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                      <DropdownMenuLabel>
+                                      <DropdownMenuLabel className="text-muted-foreground">
                                         Actions
                                       </DropdownMenuLabel>
                                       <DropdownMenuSeparator></DropdownMenuSeparator>
@@ -714,16 +899,17 @@ const TransactionHistory = () => {
                                         onClick={() =>
                                           handleEdit(transaction._id)
                                         }
-                                        className="flex items-center justify-between"
+                                        className="flex items-center justify-between cursor-pointer"
                                       >
                                         Edit <Edit className="w-4 h-4"></Edit>
                                       </DropdownMenuItem>
+                                      <DropdownMenuSeparator></DropdownMenuSeparator>
                                       <DropdownMenuItem
                                         onClick={() =>
                                           handleDelete(transaction._id)
                                         }
                                         disabled={deleteLoading}
-                                        className="flex items-center justify-between"
+                                        className="flex items-center justify-between cursor-pointer"
                                       >
                                         Delete
                                         <Trash2 className="w-4 h-4"></Trash2>

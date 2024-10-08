@@ -71,7 +71,7 @@ const transactionSchema = z.object({
 
   location: z
     .string()
-    .max(100, { message: "Location cannot exceed 100 characters." })
+    .max(50, { message: "Location cannot exceed 50 characters." })
     .optional()
     .or(z.literal("Unknown")),
 
