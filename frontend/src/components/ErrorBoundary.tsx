@@ -1,22 +1,43 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "./ui/skeleton";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "./ui/button";
+import { RefreshCcwIcon } from "lucide-react";
 
 const ErrorBoundary = () => {
   return (
     <div className="flex items-center justify-center h-full w-full px-5">
-      <Card className="w-full max-w-xl">
+      <Card className="w-full h-72 max-w-2xl flex flex-col items-center justify-center ">
         <CardHeader className="text-center">
-          <CardTitle>Something went wrong!</CardTitle>
+          <CardTitle className="capitalize">Something went wrong!</CardTitle>
+          <CardDescription>Please try again later!</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center space-y-3">
-            <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[250px]" />
-              <Skeleton className="h-4 w-[250px]" />
+            <div className="loader flex items-center justify-center">
+              <span className="ball ball1"></span>
+              <span className="ball"></span>
+              <span className="ball"></span>
+              <span className="ball"></span>
+              <span className="ball"></span>
             </div>
           </div>
         </CardContent>
+        <CardFooter className="flex items-center justify-center">
+          <Button
+            onClick={() => window.location.reload()}
+            variant={"outline"}
+            size={"lg"}
+          >
+            {" "}
+            Refresh <RefreshCcwIcon className="w-4 h-4 ml-2" />{" "}
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   );
