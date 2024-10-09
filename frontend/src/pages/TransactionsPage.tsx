@@ -20,7 +20,7 @@ const TransactionsPage = () => {
     return <Navigate to="/" />;
   }
   return (
-    <div className="w-full h-full max-w-7xl mx-auto py-3 space-y-8 flex flex-col items-center justify-center">
+    <div className="w-full h-full  max-w-7xl mx-auto px-1 py-5 md:py-10 space-y-8 flex flex-col items-center justify-center">
       <TransactionHistory></TransactionHistory>
       <DashboardButton></DashboardButton>
     </div>

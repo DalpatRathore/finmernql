@@ -49,7 +49,7 @@ const formSchema = z
       .max(100, { message: "Password cannot exceed 100 characters." })
       .refine(
         value => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/.test(value),
-        { message: "Password must contain at least one letter and one number." }
+        { message: "Password must contain at least one letter & number." }
       ),
 
     confirmPassword: z
@@ -98,7 +98,6 @@ const SignupForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // console.log(values);
     try {
       const { name, username, password, gender } = values;
       await signUp({

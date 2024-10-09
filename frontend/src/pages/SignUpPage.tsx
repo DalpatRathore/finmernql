@@ -16,7 +16,7 @@ const SignUpPage = () => {
     return <Navigate to="/" />;
   }
   return (
-    <div className="w-full h-full max-w-7xl mx-auto py-5 flex flex-col-reverse lg:flex-row items-center justify-center">
+    <div className="w-full h-full px-5 py-5 md:py-10 max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-center">
       <div className="w-full">
         <div className="md:h-[400px] p-2 hidden lg:block">
           <img

@@ -10,7 +10,6 @@ import SpinnerSvg from "@/components/SpinnerSvg";
 
 const HomePage = () => {
   const { loading, error, data } = useQuery(GET_AUTHENTICATED_USER);
-  console.log(data);
 
   if (loading) {
     return (

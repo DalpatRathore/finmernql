@@ -151,7 +151,6 @@ const ChartCard = ({ createdAt }: { createdAt: string }) => {
   );
 
   const startDate = new Date(Number(createdAt));
-  console.log(startDate);
 
   // Get the difference in months
   const monthDifference = getMonthDifference(startDate, new Date());

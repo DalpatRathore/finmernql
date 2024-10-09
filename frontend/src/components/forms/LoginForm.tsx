@@ -63,7 +63,7 @@ export function LoginForm() {
       navigate("/");
     } catch (error) {
       console.error(error);
-      toast.success("Invalid username or password.");
+      toast.error("Invalid username or password.");
     }
   };
   return (
@@ -97,7 +97,6 @@ export function LoginForm() {
                 </FormItem>
               )}
             />
-            {/* Password Field */}
             <FormField
               control={form.control}
               name="password"

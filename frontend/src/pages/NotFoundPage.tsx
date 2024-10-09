@@ -2,7 +2,7 @@ import DashboardButton from "@/components/DashboardButton";
 
 const NotFoundPage = () => {
   return (
-    <div className="grid h-screen place-content-center  px-4">
+    <div className="grid h-screen place-content-center px-4">
       <div className="text-center">
         <h1 className="text-9xl font-black text-gray-200">404</h1>
 

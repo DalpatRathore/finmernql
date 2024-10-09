@@ -142,7 +142,7 @@ const TransactionForm = ({ formType, transactionId }: TransactionFormProps) => {
       form.reset();
       navigate("/");
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Something went wrong. \nPlease try again.");
       console.log(error);
     }
   };
