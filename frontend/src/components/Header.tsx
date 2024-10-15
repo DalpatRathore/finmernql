@@ -40,7 +40,9 @@ const Header = () => {
         <div className="w-full flex gap-4 items-center justify-between">
           <Link to={"/"} className="flex items-center justify-center gap-2">
             <img src="/logo.svg" className="w-10 h-10" />
-            <h1 className="text-2xl font-bold sm:text-3xl">MERN GQL</h1>
+            <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-500  via-sky-500  to-emerald-500 ">
+              FinMERNQL
+            </h1>
           </Link>
 
           <div className="flex items-center gap-4">
